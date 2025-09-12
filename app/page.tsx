@@ -157,7 +157,7 @@ function RequestInfoForm() {
               onChange={handleParentChange}
               placeholder='Parent First Name *'
               required
-              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce]'
+              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce] text-[#222b45] dark:text-[#222b45] placeholder-gray-400 dark:placeholder-gray-400 bg-white dark:bg-white'
             />
             <input
               type='text'
@@ -166,7 +166,7 @@ function RequestInfoForm() {
               onChange={handleParentChange}
               placeholder='Parent Last Name *'
               required
-              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce]'
+              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce] text-[#222b45] dark:text-[#222b45] placeholder-gray-400 dark:placeholder-gray-400 bg-white dark:bg-white'
             />
           </div>
           <input
@@ -176,7 +176,7 @@ function RequestInfoForm() {
             onChange={handleParentChange}
             placeholder='Parent Email *'
             required
-            className='border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce]'
+            className='border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce] text-[#222b45] dark:text-[#222b45] placeholder-gray-400 dark:placeholder-gray-400 bg-white dark:bg-white'
           />
           <input
             type='text'
@@ -184,7 +184,7 @@ function RequestInfoForm() {
             value={parent.state}
             onChange={handleParentChange}
             placeholder='State'
-            className='border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce]'
+            className='border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce] text-[#222b45] dark:text-[#222b45] placeholder-gray-400 dark:placeholder-gray-400 bg-white dark:bg-white'
           />
           <button
             type='button'
@@ -217,7 +217,7 @@ function RequestInfoForm() {
               onChange={handleChildChange}
               placeholder="Child's First Name *"
               required
-              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce]'
+              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce] text-[#222b45] dark:text-[#222b45] placeholder-gray-400 dark:placeholder-gray-400 bg-white dark:bg-white'
             />
             <input
               type='text'
@@ -226,7 +226,7 @@ function RequestInfoForm() {
               onChange={handleChildChange}
               placeholder="Child's Last Name *"
               required
-              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce]'
+              className='flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce] text-[#222b45] dark:text-[#222b45] placeholder-gray-400 dark:placeholder-gray-400 bg-white dark:bg-white'
             />
           </div>
           <div>
@@ -238,7 +238,7 @@ function RequestInfoForm() {
               value={child.grade}
               onChange={handleChildChange}
               required
-              className='w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce]'
+              className='w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0072ce] text-[#222b45] dark:text-[#222b45] bg-white dark:bg-white'
             >
               <option value=''>Select Grade</option>
               {[...Array(11)].map((_, i) => (
@@ -324,9 +324,9 @@ function RequestInfoForm() {
 export default function Home() {
   const currentYear = new Date().getFullYear();
   return (
-    <main className='bg-[#f4f8fb] min-h-screen w-full font-sans'>
+    <main className='bg-[#f4f8fb] dark:bg-[#f4f8fb] min-h-screen w-full font-sans'>
       {/* Logo at the top */}
-      <div className='w-full flex justify-center py-8 bg-white border-b border-[#e5e7eb]'>
+      <div className='w-full flex justify-center py-6 md:py-8 bg-white dark:bg-white border-b border-[#e5e7eb] dark:border-[#e5e7eb] px-4'>
         <img
           src='/futureofyouth.png'
           alt='Future of Youth Logo'
@@ -334,17 +334,17 @@ export default function Home() {
         />
       </div>
       {/* Hero Section with overlay and image */}
-      <section className='relative w-full flex flex-col items-center justify-center min-h-[60vh] py-12 bg-[#f4f8fb]'>
+      <section className='relative w-full flex flex-col items-center justify-center min-h-[60vh] py-8 md:py-12 bg-[#f4f8fb] dark:bg-[#f4f8fb] px-4'>
         <img
           src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=1200&h=400&facepad=3'
           alt='Hero'
           className='absolute inset-0 w-full h-full object-cover opacity-60'
         />
         <div className='relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center gap-6'>
-          <h1 className='text-4xl md:text-5xl font-bold text-[#003a70] drop-shadow-lg'>
+          <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold text-[#003a70] dark:text-[#003a70] drop-shadow-lg leading-tight'>
             A Chance for the Youth to Learn to Start a Business
           </h1>
-          <p className='text-lg md:text-xl text-[#222b45] font-medium'>
+          <p className='text-base sm:text-lg md:text-xl text-[#222b45] dark:text-[#222b45] font-medium px-1 sm:px-4'>
             Our nonprofit program is dedicated to empowering students from
             minority and underserved communities by providing access to free
             academic support and resources. We believe that every student
@@ -357,7 +357,7 @@ export default function Home() {
           {/* Top section: Only Request Info Form */}
           <div className='w-full flex justify-center items-stretch mt-8'>
             <div
-              className='bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center gap-6 max-w-md w-full border-t-4 h-auto'
+              className='bg-white dark:bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 flex flex-col items-center gap-6 max-w-md w-full border-t-4 h-auto'
               style={{ borderTopColor: '#0072ce' }}
             >
               <h2 className='text-2xl font-bold text-[#003a70] mb-2'>
@@ -370,15 +370,15 @@ export default function Home() {
       </section>
 
       {/* Mission Statement Section */}
-      <section className='w-full flex flex-col items-center py-16 bg-[#f4f8fb]'>
+      <section className='w-full flex flex-col items-center py-10 md:py-16 bg-[#f4f8fb] dark:bg-[#f4f8fb] px-4'>
         <div
-          className='bg-white rounded-2xl shadow-xl p-10 flex flex-col items-center gap-6 max-w-2xl w-full border-t-4'
+          className='bg-white dark:bg-white rounded-2xl shadow-xl p-4 sm:p-8 md:p-10 flex flex-col items-center gap-6 max-w-2xl w-full border-t-4'
           style={{ borderTopColor: '#0072ce' }}
         >
-          <h2 className='text-3xl font-bold text-[#003a70] mb-4'>
+          <h2 className='text-2xl sm:text-3xl font-bold text-[#003a70] dark:text-[#003a70] mb-4 text-center'>
             Mission Statement
           </h2>
-          <p className='text-[#222b45] text-lg text-center'>
+          <p className='text-[#222b45] dark:text-[#222b45] text-base sm:text-lg text-center px-1 sm:px-4'>
             Our mission is to empower minority youth in Detroit by providing a
             safe and supportive space to engage in sports, build community, and
             develop essential life and business skills. Through mentorship,
@@ -391,11 +391,11 @@ export default function Home() {
       </section>
 
       {/* Why CTY Section with alternating image/text and decorative backgrounds */}
-      <section className='relative w-full py-20 bg-white overflow-hidden'>
+      <section className='relative w-full py-10 md:py-20 bg-white dark:bg-white overflow-hidden px-4'>
         {/* Decorative shape top left */}
         <div className='absolute -top-16 -left-16 w-64 h-64 bg-[#ffd200] rounded-full opacity-30 blur-2xl z-0'></div>
         {/* Unique Courses - video left, text right */}
-        <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 py-12'>
+        <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 py-6 md:py-12'>
           <div className='rounded-2xl shadow-xl w-full md:w-1/2 overflow-hidden'>
             <video
               src='/video1.mp4'
@@ -405,9 +405,11 @@ export default function Home() {
               Your browser does not support the video tag.
             </video>
           </div>
-          <div className='flex-1 flex flex-col gap-4 md:pl-8'>
-            <h3 className='text-3xl font-bold text-[#0072ce]'>Engage Youth</h3>
-            <p className='text-[#222b45] text-lg'>
+          <div className='flex-1 flex flex-col gap-2 sm:gap-4 md:pl-8'>
+            <h3 className='text-2xl sm:text-3xl font-bold text-[#0072ce] dark:text-[#0072ce]'>
+              Engage Youth
+            </h3>
+            <p className='text-[#222b45] dark:text-[#222b45] text-base sm:text-lg'>
               By addressing educational gaps and providing personalized support,
               we aim to close the achievement divide and ensure that minority
               students in our community have the tools they need to thrive
@@ -418,7 +420,7 @@ export default function Home() {
           </div>
         </div>
         {/* Individualized Learning - text left, video right */}
-        <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-12 py-12'>
+        <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12 py-6 md:py-12'>
           <div className='rounded-2xl shadow-xl w-full md:w-1/2 overflow-hidden'>
             <video
               src='/video2.mp4'
@@ -428,11 +430,11 @@ export default function Home() {
               Your browser does not support the video tag.
             </video>
           </div>
-          <div className='flex-1 flex flex-col gap-4 md:pr-8'>
-            <h3 className='text-3xl font-bold text-[#003a70]'>
+          <div className='flex-1 flex flex-col gap-2 sm:gap-4 md:pr-8'>
+            <h3 className='text-2xl sm:text-3xl font-bold text-[#003a70] dark:text-[#003a70]'>
               Individualized Learning Builds Empowerment
             </h3>
-            <p className='text-[#222b45] text-lg'>
+            <p className='text-[#222b45] dark:text-[#222b45] text-base sm:text-lg'>
               In addition to academic support, our program emphasizes the
               importance of life skills and overall well-being. We provide
               financial literacy education to equip students with the knowledge
@@ -442,7 +444,7 @@ export default function Home() {
               from minority communities—to break cycles of financial hardship
               and create generational stability.
             </p>
-            <p className='text-[#222b45] text-lg'>
+            <p className='text-[#222b45] dark:text-[#222b45] text-base sm:text-lg'>
               To ensure every child can focus and thrive, we also serve free,
               nutritious lunches during all sessions. By supporting both
               learning and wellness, we’re closing the achievement gap and
@@ -451,17 +453,17 @@ export default function Home() {
           </div>
         </div>
         {/* Flexible Approaches - image left, text right */}
-        <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 py-12'>
+        <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 py-6 md:py-12'>
           <img
             src='/image_3.jpeg'
             alt='Flexible Approaches'
             className='rounded-2xl shadow-xl w-full md:w-1/2 object-cover h-[520px]'
           />
-          <div className='flex-1 flex flex-col gap-4 md:pl-8'>
-            <h3 className='text-3xl font-bold text-[#ffd200]'>
+          <div className='flex-1 flex flex-col gap-2 sm:gap-4 md:pl-8'>
+            <h3 className='text-2xl sm:text-3xl font-bold text-[#ffd200] dark:text-[#ffd200]'>
               Flexible Approaches for Bright Minds
             </h3>
-            <p className='text-[#222b45] text-lg'>
+            <p className='text-[#222b45] dark:text-[#222b45] text-base sm:text-lg'>
               We are deeply grateful for the support of our community,
               volunteers, and partners who make this work possible. Every
               tutoring session, every shared meal, and every moment of
@@ -475,27 +477,27 @@ export default function Home() {
       </section>
 
       {/* Testimonial Section with image and quote */}
-      <section className='w-full bg-white py-16 flex flex-col items-center gap-6 shadow-inner'>
+      <section className='w-full bg-white dark:bg-white py-10 md:py-16 flex flex-col items-center gap-6 shadow-inner px-4'>
         <img
           src='/student.jpg'
           alt='Testimonial'
           className='w-24 h-24 rounded-full shadow-lg'
         />
-        <blockquote className='italic text-lg text-center text-[#222b45] max-w-2xl'>
+        <blockquote className='italic text-base sm:text-lg text-center text-[#222b45] dark:text-[#222b45] max-w-2xl px-1 sm:px-4'>
           “You build lifelong friendships at Future of Youth. The classes seem
           really intense at first, but the teachers ease you into it. Everyone
           is happy and friendly, and we always do fun activities and
           challenges.”
         </blockquote>
-        <span className='font-semibold text-[#0072ce]'>
+        <span className='font-semibold text-[#0072ce] dark:text-[#0072ce]'>
           Nicole, Future of Youth Student
         </span>
       </section>
 
       {/* Request Free Program Info Form Section (Bottom) */}
-      <section className='w-full flex flex-col items-center py-16 bg-[#f4f8fb]'>
+      <section className='w-full flex flex-col items-center py-10 md:py-16 bg-[#f4f8fb] dark:bg-[#f4f8fb] px-4'>
         <div
-          className='bg-white rounded-2xl shadow-xl p-10 flex flex-col items-center gap-6 max-w-xl w-full border-t-4'
+          className='bg-white dark:bg-white rounded-2xl shadow-xl p-4 sm:p-8 md:p-10 flex flex-col items-center gap-6 max-w-xl w-full border-t-4'
           style={{ borderTopColor: '#0072ce' }}
         >
           <h2 className='text-2xl font-bold text-[#003a70] mb-2'>
@@ -508,16 +510,16 @@ export default function Home() {
       {/* PayPal Section (Bottom) */}
       <section
         id='paypal-section'
-        className='w-full flex flex-col items-center py-16 bg-[#f4f8fb]'
+        className='w-full flex flex-col items-center py-10 md:py-16 bg-[#f4f8fb] dark:bg-[#f4f8fb] px-4'
       >
         <div
-          className='bg-white rounded-2xl shadow-xl p-10 flex flex-col items-center gap-6 max-w-xl w-full border-t-4'
+          className='bg-white dark:bg-white rounded-2xl shadow-xl p-4 sm:p-8 md:p-10 flex flex-col items-center gap-6 max-w-xl w-full border-t-4'
           style={{ borderTopColor: '#ffd200' }}
         >
-          <h2 className='text-2xl font-bold text-[#0072ce] mb-2'>
+          <h2 className='text-2xl font-bold text-[#0072ce] dark:text-[#0072ce] mb-2'>
             Support Advanced Learners
           </h2>
-          <p className='text-[#222b45] text-center mb-4'>
+          <p className='text-[#222b45] dark:text-[#222b45] text-center mb-4'>
             Help us nurture the next generation of bright minds. Make a
             contribution or pay for a program using PayPal.
           </p>
@@ -525,7 +527,7 @@ export default function Home() {
             href={process.env.NEXT_PUBLIC_PAYPAL_URL}
             target='_blank'
             rel='noopener noreferrer'
-            className='bg-[#0072ce] hover:bg-[#005fa3] text-white font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
+            className='bg-[#0072ce] hover:bg-[#005fa3] text-white font-semibold py-3 px-8 rounded-lg shadow transition text-lg dark:bg-[#0072ce] dark:hover:bg-[#005fa3] dark:text-white'
           >
             Pay with PayPal
           </a>
@@ -533,7 +535,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className='w-full py-8 flex flex-col items-center gap-2 text-gray-500 text-sm mt-8'>
+      <footer className='w-full py-6 md:py-8 flex flex-col items-center gap-2 text-gray-500 dark:text-gray-500 text-sm mt-8 px-4'>
         <span>© {currentYear} Future of Youth. All rights reserved.</span>
       </footer>
     </main>
