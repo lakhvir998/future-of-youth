@@ -31,6 +31,9 @@ function RequestInfoForm() {
     interests: [],
     programs: [],
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const academicOptions: string[] = [
     'Computer Science and Technology',
     'History and Social Science',
@@ -64,8 +67,86 @@ function RequestInfoForm() {
     });
   }
 
+  function validateForm() {
+    if (
+      !parent.first.trim() ||
+      !parent.last.trim() ||
+      !parent.email.trim() ||
+      !parent.state.trim()
+    )
+      return false;
+    if (!child.first.trim() || !child.last.trim() || !child.grade.trim())
+      return false;
+    if (!child.interests.length || !child.programs.length) return false;
+    return true;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSuccess(null);
+    setError(null);
+    if (!validateForm()) {
+      setError(
+        'Please fill out all fields and select at least one interest and one program.'
+      );
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch('/api/send-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ parent, child }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSuccess('Your request has been sent!');
+        setParent({ first: '', last: '', email: '', state: '' });
+        setChild({
+          first: '',
+          last: '',
+          grade: '',
+          interests: [],
+          programs: [],
+        });
+        setStep(1);
+      } else {
+        setError(data.message || 'Failed to send.');
+      }
+    } catch (err) {
+      setError('Failed to send.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (success) {
+    return (
+      <div className='flex flex-col items-center justify-center gap-6 py-8'>
+        <svg
+          className='w-16 h-16 text-green-500'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+          viewBox='0 0 24 24'
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M5 13l4 4L19 7'
+          />
+        </svg>
+        <h2 className='text-2xl font-bold text-green-700'>Thank you!</h2>
+        <p className='text-lg text-gray-700 text-center max-w-md'>
+          Your request has been sent successfully. We appreciate your interest
+          and will get back to you soon.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <form className='w-full flex flex-col gap-4'>
+    <form className='w-full flex flex-col gap-4' onSubmit={handleSubmit}>
       {step === 1 && (
         <>
           <div className='flex flex-col md:flex-row gap-4 w-full'>
@@ -107,8 +188,20 @@ function RequestInfoForm() {
           />
           <button
             type='button'
-            onClick={() => setStep(2)}
-            className='mt-2 bg-[#0072ce] hover:bg-[#005fa3] text-white font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
+            onClick={() => {
+              if (
+                !parent.first.trim() ||
+                !parent.last.trim() ||
+                !parent.email.trim() ||
+                !parent.state.trim()
+              ) {
+                setError('Please fill out all parent fields.');
+                return;
+              }
+              setError(null);
+              setStep(2);
+            }}
+            className='mt-2 cursor-pointer bg-[#0072ce] hover:bg-[#005fa3] text-white font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
           >
             Next →
           </button>
@@ -197,17 +290,19 @@ function RequestInfoForm() {
             <button
               type='button'
               onClick={() => setStep(1)}
-              className='bg-gray-200 hover:bg-gray-300 text-[#003a70] font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
+              className='bg-gray-200 cursor-pointer hover:bg-gray-300 text-[#003a70] font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
             >
               ← Back
             </button>
             <button
               type='submit'
-              className='bg-[#0072ce] hover:bg-[#005fa3] text-white font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
+              className='bg-[#0072ce] cursor-pointer hover:bg-[#005fa3] text-white font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
+              disabled={loading}
             >
-              Submit
+              {loading ? 'Sending...' : 'Submit'}
             </button>
           </div>
+
           <p className='text-xs text-gray-500 mt-2'>
             We respect your privacy. Submitting this form constitutes your
             express written consent to receive emails, phone calls, text
@@ -221,11 +316,13 @@ function RequestInfoForm() {
           </p>
         </>
       )}
+      {error && <p className='text-red-600 text-sm'>{error}</p>}
     </form>
   );
 }
 
 export default function Home() {
+  const currentYear = new Date().getFullYear();
   return (
     <main className='bg-[#f4f8fb] min-h-screen w-full font-sans'>
       {/* Logo at the top */}
@@ -248,10 +345,14 @@ export default function Home() {
             A Chance for Advanced Learners to Study What They Love
           </h1>
           <p className='text-lg md:text-xl text-[#222b45] font-medium'>
-            As the country’s first academic talent center, Johns Hopkins
-            University’s Center for Talented Youth (Future of Youth) supports
-            and advocates for advanced learners to make sure they achieve their
-            full academic potential.
+            Our nonprofit program is dedicated to empowering students from
+            minority and underserved communities by providing access to free
+            academic support and resources. We believe that every student
+            deserves the opportunity to reach their full potential, regardless
+            of background or circumstance. Through tutoring, mentorship, and
+            skill-building workshops, we create a safe and encouraging space
+            where students can strengthen their academic foundation, build
+            confidence, and prepare for future success.
           </p>
           {/* Top section: Only Request Info Form */}
           <div className='w-full flex justify-center items-stretch mt-8'>
@@ -310,11 +411,12 @@ export default function Home() {
               Unique Courses Engage Advanced Learners
             </h3>
             <p className='text-[#222b45] text-lg'>
-              Johns Hopkins research informs Future of Youth’s enriching
-              academic experiences for advanced learners. An accelerated pace
-              lets your child cover up to an entire semester in a few weeks.
-              From robotics and Arabic to physics and philosophy, they’ll study
-              what they love and work to their full potential.
+              By addressing educational gaps and providing personalized support,
+              we aim to close the achievement divide and ensure that minority
+              students in our community have the tools they need to thrive
+              academically and beyond. Our program is not just about homework
+              help—it’s about fostering resilience, promoting equity, and
+              building brighter futures.
             </p>
           </div>
         </div>
@@ -335,30 +437,40 @@ export default function Home() {
               Individualized Learning Builds Empowerment
             </h3>
             <p className='text-[#222b45] text-lg'>
-              World-class instructors help your child move at their own pace as
-              they dig into challenging, thought-provoking courses they can’t
-              access at school. Curiosity soars as they gain confidence, find
-              belonging, and have space to succeed—and safely fail—in a
-              supportive environment.
+              In addition to academic support, our program emphasizes the
+              importance of life skills and overall well-being. We provide
+              financial literacy education to equip students with the knowledge
+              and tools they need to make informed decisions about money
+              management, saving, and building a secure future. By introducing
+              these concepts early, we empower young people—especially those
+              from minority communities—to break cycles of financial hardship
+              and create generational stability.
+            </p>
+            <p className='text-[#222b45] text-lg'>
+              To ensure every child can focus and thrive, we also serve free,
+              nutritious lunches during all sessions. By supporting both
+              learning and wellness, we’re closing the achievement gap and
+              creating brighter futures for our community.
             </p>
           </div>
         </div>
         {/* Flexible Approaches - image left, text right */}
         <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 py-12'>
           <img
-            src='https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=facearea&w=400&h=320&facepad=3'
+            src='/image_3.jpeg'
             alt='Flexible Approaches'
-            className='rounded-2xl shadow-xl w-full md:w-1/2 object-cover'
+            className='rounded-2xl shadow-xl w-full md:w-1/2 object-cover h-[520px]'
           />
           <div className='flex-1 flex flex-col gap-4 md:pl-8'>
             <h3 className='text-3xl font-bold text-[#ffd200]'>
               Flexible Approaches for Bright Minds
             </h3>
             <p className='text-[#222b45] text-lg'>
-              Choose from year-round online options and on-campus summer
-              programs. Your child will broaden their horizons and experience
-              subjects not offered in most schools. Through our accredited
-              courses, they can even earn school credit.
+              We are deeply grateful for the support of our community,
+              volunteers, and partners who make this work possible. Every
+              tutoring session, every shared meal, and every moment of
+              encouragement helps create lasting change. Together, we are not
+              just building stronger students—we are building brighter futures.
             </p>
           </div>
         </div>
@@ -369,7 +481,7 @@ export default function Home() {
       {/* Testimonial Section with image and quote */}
       <section className='w-full bg-white py-16 flex flex-col items-center gap-6 shadow-inner'>
         <img
-          src='https://randomuser.me/api/portraits/women/68.jpg'
+          src='/student.jpg'
           alt='Testimonial'
           className='w-24 h-24 rounded-full shadow-lg'
         />
@@ -426,10 +538,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className='w-full py-8 flex flex-col items-center gap-2 text-gray-500 text-sm mt-8'>
-        <span>© 2025 Future of Youth. All rights reserved.</span>
-        <a href='/privacy-policy' className='underline hover:text-[#0072ce]'>
-          Privacy Policy
-        </a>
+        <span>© {currentYear} Future of Youth. All rights reserved.</span>
       </footer>
     </main>
   );
