@@ -259,7 +259,7 @@ export default function Home() {
               className='bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center gap-6 max-w-md w-full border-t-4 h-auto'
               style={{ borderTopColor: '#0072ce' }}
             >
-              <h2 className='text-xl font-bold text-[#003a70] mb-2'>
+              <h2 className='text-2xl font-bold text-[#003a70] mb-2'>
                 Request Free Program Info
               </h2>
               <RequestInfoForm />
@@ -293,13 +293,18 @@ export default function Home() {
       <section className='relative w-full py-20 bg-white overflow-hidden'>
         {/* Decorative shape top left */}
         <div className='absolute -top-16 -left-16 w-64 h-64 bg-[#ffd200] rounded-full opacity-30 blur-2xl z-0'></div>
-        {/* Unique Courses - image left, text right */}
+        {/* Unique Courses - video left, text right */}
         <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 py-12'>
-          <img
-            src='https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=320&facepad=3'
-            alt='Unique Courses'
-            className='rounded-2xl shadow-xl w-full md:w-1/2 object-cover'
-          />
+          <div className='rounded-2xl shadow-xl w-full md:w-1/2 overflow-hidden'>
+            <video
+              src='/video1.mp4'
+              controls
+              className='w-full h-[320px] object-cover rounded-2xl'
+              poster='https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=320&facepad=3'
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
           <div className='flex-1 flex flex-col gap-4 md:pl-8'>
             <h3 className='text-3xl font-bold text-[#0072ce]'>
               Unique Courses Engage Advanced Learners
@@ -313,13 +318,18 @@ export default function Home() {
             </p>
           </div>
         </div>
-        {/* Individualized Learning - text left, image right */}
+        {/* Individualized Learning - text left, video right */}
         <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-12 py-12'>
-          <img
-            src='https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=320&facepad=3'
-            alt='Individualized Learning'
-            className='rounded-2xl shadow-xl w-full md:w-1/2 object-cover'
-          />
+          <div className='rounded-2xl shadow-xl w-full md:w-1/2 overflow-hidden'>
+            <video
+              src='/video2.mp4'
+              controls
+              className='w-full h-[320px] object-cover rounded-2xl'
+              poster='https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=320&facepad=3'
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
           <div className='flex-1 flex flex-col gap-4 md:pr-8'>
             <h3 className='text-3xl font-bold text-[#003a70]'>
               Individualized Learning Builds Empowerment
