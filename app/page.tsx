@@ -333,7 +333,7 @@ export default function Home() {
       <div className='w-full flex justify-center py-6 md:py-8 bg-white dark:bg-white border-b border-[#e5e7eb] dark:border-[#e5e7eb] px-4'>
         <img
           src='/futureofyouth.png'
-          alt='Future of Youth Logo'
+          alt='Future of the Youth Logo'
           className='h-40 w-88'
         />
       </div>
@@ -488,13 +488,13 @@ export default function Home() {
           className='w-24 h-24 rounded-full shadow-lg'
         />
         <blockquote className='italic text-base sm:text-lg text-center text-[#222b45] dark:text-[#222b45] max-w-2xl px-1 sm:px-4'>
-          “You build lifelong friendships at Future of Youth. The classes seem
-          really intense at first, but the teachers ease you into it. Everyone
-          is happy and friendly, and we always do fun activities and
+          “You build lifelong friendships at Future of the Youth. The classes
+          seem really intense at first, but the teachers ease you into it.
+          Everyone is happy and friendly, and we always do fun activities and
           challenges.”
         </blockquote>
         <span className='font-semibold text-[#0072ce] dark:text-[#0072ce]'>
-          Nicole, Future of Youth Student
+          Nicole, Future of the Youth Student
         </span>
       </section>
 
@@ -521,7 +521,7 @@ export default function Home() {
           style={{ borderTopColor: '#ffd200' }}
         >
           <h2 className='text-2xl font-bold text-[#0072ce] dark:text-[#0072ce] mb-2'>
-            Support Advanced Learners
+            Support the Youth
           </h2>
           <p className='text-[#222b45] dark:text-[#222b45] text-center mb-4'>
             Help us nurture the next generation of bright minds. Make a
@@ -540,7 +540,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className='w-full py-6 md:py-8 flex flex-col items-center gap-2 text-gray-500 dark:text-gray-500 text-sm mt-8 px-4'>
-        <span>© {currentYear} Future of Youth. All rights reserved.</span>
+        <span>© {currentYear} Future of the Youth. All rights reserved.</span>
       </footer>
     </main>
   );
