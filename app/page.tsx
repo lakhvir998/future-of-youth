@@ -342,7 +342,7 @@ export default function Home() {
         />
         <div className='relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center gap-6'>
           <h1 className='text-4xl md:text-5xl font-bold text-[#003a70] drop-shadow-lg'>
-            A Chance for Advanced Learners to Study What They Love
+            A Chance for the Youth to Learn to Start a Business
           </h1>
           <p className='text-lg md:text-xl text-[#222b45] font-medium'>
             Our nonprofit program is dedicated to empowering students from
@@ -408,7 +408,7 @@ export default function Home() {
           </div>
           <div className='flex-1 flex flex-col gap-4 md:pl-8'>
             <h3 className='text-3xl font-bold text-[#0072ce]'>
-              Unique Courses Engage Advanced Learners
+              Change to engage youth
             </h3>
             <p className='text-[#222b45] text-lg'>
               By addressing educational gaps and providing personalized support,
@@ -492,7 +492,7 @@ export default function Home() {
           challenges.”
         </blockquote>
         <span className='font-semibold text-[#0072ce]'>
-          Rakeb, Future of Youth Student
+          Nicole, Future of Youth Student
         </span>
       </section>
 
