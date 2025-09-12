@@ -404,7 +404,7 @@ export default function Home() {
             contribution or pay for a program using PayPal.
           </p>
           <a
-            href='https://www.paypal.com/donate/?hosted_button_id=YOUR_BUTTON_ID'
+            href={process.env.NEXT_PUBLIC_PAYPAL_URL}
             target='_blank'
             rel='noopener noreferrer'
             className='bg-[#0072ce] hover:bg-[#005fa3] text-white font-semibold py-3 px-8 rounded-lg shadow transition text-lg'
