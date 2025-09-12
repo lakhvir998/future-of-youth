@@ -401,15 +401,12 @@ export default function Home() {
               src='/video1.mp4'
               controls
               className='w-full h-[320px] object-cover rounded-2xl'
-              poster='https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=320&facepad=3'
             >
               Your browser does not support the video tag.
             </video>
           </div>
           <div className='flex-1 flex flex-col gap-4 md:pl-8'>
-            <h3 className='text-3xl font-bold text-[#0072ce]'>
-              Change to engage youth
-            </h3>
+            <h3 className='text-3xl font-bold text-[#0072ce]'>Engage Youth</h3>
             <p className='text-[#222b45] text-lg'>
               By addressing educational gaps and providing personalized support,
               we aim to close the achievement divide and ensure that minority
@@ -427,7 +424,6 @@ export default function Home() {
               src='/video2.mp4'
               controls
               className='w-full h-[320px] object-cover rounded-2xl'
-              poster='https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=320&facepad=3'
             >
               Your browser does not support the video tag.
             </video>
