@@ -262,7 +262,9 @@ function RequestInfoForm() {
                     onChange={(e) => handleCheckboxChange(e, 'interests')}
                     className='accent-[#0072ce] w-5 h-5'
                   />
-                  <span>{opt}</span>
+                  <span className='text-[#222b45] dark:text-[#222b45]'>
+                    {opt}
+                  </span>
                 </label>
               ))}
             </div>
@@ -281,7 +283,9 @@ function RequestInfoForm() {
                     onChange={(e) => handleCheckboxChange(e, 'programs')}
                     className='accent-[#0072ce] w-5 h-5'
                   />
-                  <span>{opt}</span>
+                  <span className='text-[#222b45] dark:text-[#222b45]'>
+                    {opt}
+                  </span>
                 </label>
               ))}
             </div>
