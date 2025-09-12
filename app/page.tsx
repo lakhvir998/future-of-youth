@@ -494,7 +494,7 @@ export default function Home() {
           challenges.”
         </blockquote>
         <span className='font-semibold text-[#0072ce] dark:text-[#0072ce]'>
-          Nicole, Future of the Youth Student
+          Rachel, Future of the Youth Student
         </span>
       </section>
 
