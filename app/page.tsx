@@ -330,7 +330,7 @@ export default function Home() {
         <img
           src='/futureofyouth.png'
           alt='Future of Youth Logo'
-          className='h-16 w-48'
+          className='h-40 w-88'
         />
       </div>
       {/* Hero Section with overlay and image */}
