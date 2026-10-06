@@ -1,4 +1,4 @@
-import { MISSION_STATEMENT } from '@/lib/content';
+import { MISSION_STATEMENT } from '@/lib/content/home';
 import { Card } from '@/components/ui/card';
 
 export function MissionSection() {

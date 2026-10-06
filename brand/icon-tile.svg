@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Future of the Youth">
+  <title>Future of the Youth</title>
+  <style>
+    .tile { fill: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #003a70; }
+      .chip { fill: #0072ce; }
+      .trace { stroke: #5aaeff; }
+      .node { fill: #5aaeff; }
+    }
+  </style>
+  <rect class="tile" width="512" height="512" rx="112"/>
+  <g transform="translate(25.6 25.6) scale(0.9)">
+  <path class="trace" d="M188 116V80M188 396v36M116 188H80M396 188h36M256 116V80M256 396v36M116 256H80M396 256h36M324 116V80M324 396v36M116 324H80M396 324h36" stroke="#0072ce" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <g class="node" fill="#0072ce"><circle cx="188" cy="72" r="11"/><circle cx="188" cy="440" r="11"/><circle cx="72" cy="188" r="11"/><circle cx="440" cy="188" r="11"/><circle cx="256" cy="72" r="11"/><circle cx="256" cy="440" r="11"/><circle cx="72" cy="256" r="11"/><circle cx="440" cy="256" r="11"/><circle cx="324" cy="72" r="11"/><circle cx="324" cy="440" r="11"/><circle cx="72" cy="324" r="11"/><circle cx="440" cy="324" r="11"/></g>
+  <rect class="chip" x="116" y="116" width="280" height="280" rx="56" fill="#003a70"/>
+  <rect x="140" y="140" width="232" height="232" rx="36" fill="none" stroke="#5aaeff" stroke-width="4" opacity=".5"/>
+  <path d="M196 214 256 274M316 214 256 274M256 274v66" stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <g fill="#ffffff"><circle cx="196" cy="214" r="20"/><circle cx="316" cy="214" r="20"/><circle cx="256" cy="274" r="20"/><circle cx="256" cy="340" r="20"/></g>
+  <path d="M256 128Q256 168 296 168Q256 168 256 208Q256 168 216 168Q256 168 256 128Z" fill="#ffd200"/>
+  </g>
+</svg>

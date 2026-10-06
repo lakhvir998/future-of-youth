@@ -5,13 +5,18 @@ single source of truth; `CLAUDE.md` imports it.
 
 ## Project overview
 
-**Future of the Youth** is a marketing / lead-capture landing page for a Detroit-based
-nonprofit youth program. Visitors read about the program, submit a two-step
-"Request Free Program Info" form (emailed to staff over SMTP), and can donate through
-an external PayPal link. Deployed on Vercel.
+**Future of the Youth** is the website of Future of the Youth, a Detroit
+501(c)(3) nonprofit. The site is being prepared for **Google for Nonprofits / Google
+Ad Grants**, so it must stay content-rich, fast, secure, and free of broken links (see
+"Google Ad Grants readiness" below).
 
-There's no database, no auth, and no user accounts. The only server-side logic is one
-Server Action that validates the form and sends an email.
+Pages: Home, About, Programs (+ one page per program), AI & Technology, Get Involved,
+Donate, Contact, and Privacy. Visitors can request program info (two-step form), send
+a contact message, and donate through an external PayPal link. Both forms are emailed
+to staff over SMTP. Deployed on Vercel.
+
+There's no database, no auth, and no user accounts. Server-side logic is two Server
+Actions that validate a form and send an email.
 
 ## Tech stack
 
@@ -47,7 +52,8 @@ npm run typecheck      # tsc --noEmit
 npm run lint           # eslint .            (lint:fix to auto-fix)
 npm run format         # prettier --write .  (format:check to verify)
 npm test               # vitest run          (test:watch for watch mode)
-npm run check          # everything CI runs: typecheck, lint, format, test, build
+npm run check:links    # after a build: crawl the site, fail on broken links/anchors
+npm run check          # everything CI runs: typecheck, lint, format, test, build, links
 ```
 
 CI (`.github/workflows/ci.yml`) runs the same steps on every PR and every push to
@@ -57,33 +63,44 @@ CI (`.github/workflows/ci.yml`) runs the same steps on every PR and every push t
 
 ```
 app/
-  layout.tsx                      Root layout: Geist fonts, site-wide metadata, viewport
-  page.tsx                        Composes sections + JSON-LD; Server Component, statically prerendered
+  layout.tsx                      Root layout: skip link, header, <main id="main">, footer, Google tag
+  page.tsx                        Home
+  about/, programs/, programs/[slug]/, ai-technology/, get-involved/, donate/, contact/, privacy/
+  not-found.tsx                   Branded 404 (noindex)
   globals.css                     Tailwind import + @theme brand tokens
-  favicon.ico, icon.png, apple-icon.png   App icons (generated from the logo mark)
-  opengraph-image.png, twitter-image.png  Social share images (+ .alt.txt)
-  robots.ts, sitemap.ts, manifest.ts      SEO / PWA metadata routes
-  llms.txt/route.ts               Plain-text site summary for AI answer engines
+  favicon.ico, icon.png, apple-icon.png, opengraph-image.png, twitter-image.png
+  robots.ts, sitemap.ts, manifest.ts, llms.txt/route.ts   SEO / AEO metadata routes
   actions/
-    submit-request-info.ts        'use server': rate-limit → validate → honeypot → send email
+    submit-request-info.ts        'use server' → handleFormSubmission
+    submit-contact.ts             'use server' → handleFormSubmission
 components/
-  layout/                         SiteHeader, SiteFooter
-  sections/                       One component per page section (hero, mission, features, …)
-  request-info-form/              The ONLY client component tree
-    request-info-form.tsx         'use client' entry; renders the steps
-    use-request-info-form.ts      All form state, validation, and submission logic
-    parent-step.tsx, child-step.tsx, form-success.tsx, consent-notice.tsx
-  seo/structured-data.tsx         JSON-LD (NGO, WebSite, WebPage) with safe serialization
-  ui/                             Button (+ buttonClasses), Card, TextField, SelectField, CheckboxGroup
+  layout/                         SiteHeader, NavLinks, MobileNav, SiteFooter, Breadcrumbs
+  sections/                       Page sections (hero, page-hero, program cards/details, donate CTA, …)
+  forms/                          Shared form parts: success, consent, honeypot, alert, focus hook
+  request-info-form/              Two-step request-info form (client)
+  contact-form/                   Contact form (client) + ?topic= preselect wrapper
+  donate/paypal-button.tsx        Outbound PayPal link that records a donate_click
+  analytics/google-tag.tsx        Loads gtag.js only when IDs are configured
+  seo/structured-data.tsx         JSON-LD @graph builders with safe serialization
+  ui/                             Button, Card, Section, TextField, TextArea, SelectField, CheckboxGroup, CheckList
 lib/
-  request-info.ts                 Zod schemas, option lists, shared types, getFieldErrors
+  content/                        ALL site copy and page data (see "Content model")
+  request-info.ts, contact.ts     Zod schemas + option lists shared by client and server
+  validation.ts                   requiredText, emailSchema, getFieldErrors, SubmitResult
+  form-submission.ts              Shared Server Action pipeline (rate limit → validate → honeypot → send)
+  client-ip.ts, rate-limit.ts     Rate-limiting helpers
   env.ts                          Lazily validated server env vars
-  mailer.ts                       Nodemailer transport + sendRequestInfoEmail
-  email/                          escapeHtml + email template (HTML and plain text)
-  rate-limit.ts                   Best-effort in-memory fixed-window limiter
+  mailer.ts                       Nodemailer transport + sendEmail / sendRequestInfoEmail / sendContactEmail
+  email/                          escapeHtml, shared layout, per-form templates
+  analytics-config.ts             Google tag IDs (validated) + CSP hosts; safe to import from next.config
+  analytics.ts                    trackEvent() with a fixed, PII-free event schema
+  csp.ts                          buildContentSecurityPolicy()
+  seo.ts                          buildMetadata / buildPageMetadata
   site.ts                         Site name/description, getSiteUrl(), getPaypalUrl(), anchor ids
-  content.ts                      Page copy reused by JSON-LD and llms.txt (single source)
   cn.ts                           className joiner
+brand/                            Logo sources: generate-svgs.py (single geometry) → SVGs, og-image.html
+scripts/check-links.mjs           Link/anchor crawler used by CI
+scripts/build-brand-assets.mjs    Renders every PNG/ICO icon and the share image from brand/
 test/                             Shared test helpers (axe WCAG 2.2 check)
 public/                           Logo, images, icons/ (PWA), video1.mp4 (28 MB), video2.mp4 (90 MB)
 ```
@@ -95,25 +112,35 @@ Tests sit next to the code they cover, named `*.test.ts(x)`.
 Never commit `.env*` files except `.env.example`. Configure real values in Vercel and
 in a local `.env.local`.
 
-| Variable                 | Scope  | Purpose                                                                                 |
-| ------------------------ | ------ | --------------------------------------------------------------------------------------- |
-| `SMTP_HOST`              | server | SMTP server host                                                                        |
-| `SMTP_PORT`              | server | SMTP port (number)                                                                      |
-| `SMTP_SECURE`            | server | `"true"` for implicit TLS (usually port 465)                                            |
-| `SMTP_USER`              | server | SMTP username                                                                           |
-| `SMTP_PASS`              | server | SMTP password / app password                                                            |
-| `SMTP_FROM`              | server | Sender address (optional, defaults to `SMTP_USER`)                                      |
-| `FORM_TO_EMAIL`          | server | Inbox that receives form submissions                                                    |
-| `NEXT_PUBLIC_SITE_URL`   | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost |
-| `NEXT_PUBLIC_PAYPAL_URL` | client | PayPal donation link; must be `https://`, or the button is hidden                       |
+| Variable                              | Scope  | Purpose                                                                                 |
+| ------------------------------------- | ------ | --------------------------------------------------------------------------------------- |
+| `SMTP_HOST`                           | server | SMTP server host                                                                        |
+| `SMTP_PORT`                           | server | SMTP port (number)                                                                      |
+| `SMTP_SECURE`                         | server | `"true"` for implicit TLS (usually port 465)                                            |
+| `SMTP_USER`                           | server | SMTP username                                                                           |
+| `SMTP_PASS`                           | server | SMTP password / app password                                                            |
+| `SMTP_FROM`                           | server | Sender address (optional, defaults to `SMTP_USER`)                                      |
+| `FORM_TO_EMAIL`                       | server | Inbox that receives form submissions                                                    |
+| `NEXT_PUBLIC_SITE_URL`                | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost |
+| `NEXT_PUBLIC_PAYPAL_URL`              | client | PayPal donation link; must be `https://`, or the button is hidden                       |
+| `NEXT_PUBLIC_CONTACT_EMAIL`           | client | Public contact email (footer, Contact, Privacy, JSON-LD); hidden until set              |
+| `NEXT_PUBLIC_CONTACT_PHONE`           | client | Optional public phone number                                                            |
+| `NEXT_PUBLIC_MAILING_ADDRESS`         | client | Optional mailing address; `\n` separates lines                                          |
+| `NEXT_PUBLIC_EIN`                     | client | Optional EIN (`12-3456789`); shown on About/Donate/footer                               |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`       | client | GA4 ID (`G-…`); enables the Google tag and its CSP hosts                                |
+| `NEXT_PUBLIC_GOOGLE_ADS_ID`           | client | Google Ads ID (`AW-…`)                                                                  |
+| `NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL`   | client | Ads conversion label for form submissions                                               |
+| `NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL` | client | Ads conversion label for PayPal clicks                                                  |
 
 Rules:
 
 - Read server variables only through `getServerEnv()` in `lib/env.ts`. It validates them
   with Zod and is lazy, so `next build` doesn't need SMTP credentials.
 - `NEXT_PUBLIC_*` values are baked into the JS bundle. Never put secrets in them.
-- Read the site URL and PayPal URL through `getSiteUrl()` / `getPaypalUrl()` in
-  `lib/site.ts`, never from `process.env` directly; they validate the values.
+- Never read `NEXT_PUBLIC_*` values from `process.env` directly in components. Use the
+  validating getters: `getSiteUrl()` / `getPaypalUrl()` (`lib/site.ts`),
+  `getContactInfo()` (`lib/content/organization.ts`), and `getAnalyticsConfig()`
+  (`lib/analytics-config.ts`). Malformed values are dropped, never rendered.
 - **Set `NEXT_PUBLIC_SITE_URL` in Vercel production** to the real domain, or canonical
   URLs and the sitemap will point at the `*.vercel.app` domain.
 - When you add a variable, update this table, `.env.example`, and `lib/env.ts` in the
@@ -123,11 +150,13 @@ Rules:
 
 ### Rendering model
 
-- **Server Components by default.** The page, layout, and every section are rendered
-  on the server, and `/` is prerendered as static HTML at build time.
-- **`'use client'` only on the smallest interactive subtree.** Right now that's only
-  `components/request-info-form/request-info-form.tsx`. Don't add it to sections or
-  pages; extract the interactive part into its own client component instead.
+- **Server Components by default.** Every page is prerendered as static HTML at build
+  time (program pages via `generateStaticParams`, with `dynamicParams = false`).
+- **`'use client'` only on the smallest interactive subtree:** the two forms, the nav
+  links (`aria-current`), the mobile menu, and the PayPal button (click tracking).
+  Don't add it to sections or pages.
+- `useSearchParams` must sit under a `<Suspense>` boundary so pages stay static (see
+  `app/contact/page.tsx`).
 - **Mutations use Server Actions** (`app/actions/*.ts`, `'use server'`), not API routes.
   Next.js checks the request origin on Server Actions, and the client calls them like
   typed functions. Add a route handler (`app/api/*/route.ts`) only for things that need
@@ -137,9 +166,14 @@ Rules:
 
 ### Validation
 
-- `lib/request-info.ts` is the one definition of the form's shape. The client uses it
-  for per-step field errors (`getFieldErrors`), and the Server Action re-validates the
-  full payload with `requestInfoSchema`. Don't duplicate rules elsewhere.
+- Each form has one schema (`lib/request-info.ts`, `lib/contact.ts`) built from the
+  helpers in `lib/validation.ts`. The client uses it for field errors
+  (`getFieldErrors`); the Server Action re-validates through `handleFormSubmission`.
+  Don't duplicate rules elsewhere.
+- New public forms: add a schema, an email template on `lib/email/layout.ts`, a
+  `send…` function in `lib/mailer.ts`, and a Server Action that calls
+  `handleFormSubmission`. Reuse `components/forms/*` for the honeypot, alert, consent,
+  success state, and `useFocusFirstInvalid`.
 - Server Actions accept `unknown` input and parse it. Never trust the client-side
   types.
 
@@ -179,36 +213,98 @@ Rules:
 - Use named functions for handlers. Use early returns over nested conditionals.
 - Comments explain _why_, not _what_.
 
+## Content model
+
+- **All copy lives in `lib/content/`**, never inline in a page when it's reused:
+  `home.ts`, `about.ts`, `programs.ts`, `ai-technology.ts`, `get-involved.ts`,
+  `donate.ts`, `organization.ts`, and `pages.ts` (the page registry).
+- `pages.ts` is the registry of every route: label, title, description, and whether
+  it's in the nav. Navigation, metadata (`buildPageMetadata`), breadcrumbs
+  (`breadcrumbsFor`), the sitemap, and `llms.txt` all derive from it. **Adding a page
+  means adding it here first.**
+- `programs.ts` drives the program cards, `/programs/[slug]` pages, JSON-LD `Service`
+  nodes, and the sitemap. A program whose `href` isn't under `/programs/` (AI &
+  Technology) has its own route instead.
+- Copy marked `// DRAFT: client to approve` was written by us and still needs the
+  client's sign-off. **Never invent facts**: no statistics, schedules, locations,
+  partners, staff, or outcomes the client hasn't confirmed.
+- `NONPROFIT_STATEMENT` ("Future of the Youth is a 501(c)(3) nonprofit
+  organization.") is the client's exact wording; show it on About, Donate, Contact, the
+  donate CTA, and the footer.
+
 ## SEO, AEO, and GEO
 
-- Site-wide metadata (title, description, canonical, Open Graph, Twitter, robots) lives
-  in `app/layout.tsx` and uses `metadataBase = getSiteUrl()`. Pages added later should
-  export their own `metadata` with a unique title, description, and
-  `alternates.canonical`.
-- Exactly one `<h1>` per page, with sections as `<h2>` beneath it. Label sections with
-  `aria-labelledby` pointing at their heading.
-- **Structured data:** `components/seo/structured-data.tsx` emits a JSON-LD `@graph`.
-  Always serialize with `serializeJsonLd()`, which escapes `<`. Don't add schema types
-  the page can't back up (e.g. self-serving `Review`, or `FAQPage` without visible FAQs).
-- **Single source for copy:** text that appears in both the page and machine-readable
-  outputs (JSON-LD, `llms.txt`) lives in `lib/content.ts`. Change it there, never in
-  two places.
-- New public routes must be added to `app/sitemap.ts`. `app/robots.ts` allows all
-  crawlers, including AI crawlers; changing that is a business decision.
-- Icons and share images use Next's file conventions in `app/`. To change them,
-  regenerate the files from the logo; don't add `<link>` tags by hand.
+- Every page exports metadata via `buildPageMetadata(path)` or `buildMetadata()` in
+  `lib/seo.ts`: a unique title and description, a canonical URL, and Open Graph tags.
+  `metadataBase` comes from `getSiteUrl()`. The root layout deliberately sets no
+  canonical (it would leak onto the 404). A test enforces unique titles and
+  descriptions.
+- Exactly one `<h1>` per page (`PageHero` on subpages), with sections as `<h2>`
+  (`components/ui/section.tsx`, which labels the section by its heading).
+- **Structured data:** render `<StructuredData path name description breadcrumbs
+extra />` on every page. It emits the NGO (with `legalName`, `nonprofitStatus:
+Nonprofit501c3`, and contact details when set), the WebSite, the WebPage, a
+  BreadcrumbList, and any extra nodes (e.g. `buildProgramNode`). It's serialized with
+  `serializeJsonLd()`, which escapes `<`. Don't add schema the page can't back up.
+- `app/sitemap.ts` and `llms.txt` are generated from the registry and programs. Don't
+  hand-edit URL lists.
+- Icons and share images use Next's file conventions in `app/` and are generated (see
+  "Brand and logo"); don't add `<link>` tags by hand.
+
+## Brand and logo
+
+- **Logo: "AI Chip".** An AI processor chip with circuit traces; inside, a young
+  person made of connected network nodes with arms raised (a "Y" for Youth) and a gold
+  AI sparkle for a head. It stands for young people at the heart of AI and technology.
+  Colors are the site tokens: navy, brand blue, gold, and light blue on dark.
+- **Single source:** `brand/generate-svgs.py` defines the geometry once and writes
+  every SVG: the standalone marks (`logo-mark.svg`, `logo-mark-dark.svg` for dark
+  backgrounds), the adaptive favicon (`icon-tile.svg`, which follows the browser's
+  light/dark theme), and the raster sources (light tile, Apple square, maskable).
+- **Regenerate** after any logo change:
+  `python3 brand/generate-svgs.py && npm run brand:build`. The build renders, with
+  headless Chrome (`CHROME_PATH` if it isn't in the default macOS location), `app/icon.png`,
+  `app/apple-icon.png`, `app/favicon.ico` (16/32/48), `public/icons/*` (PWA, including
+  maskable), `public/logo-512.png` (structured data), and the Open Graph/Twitter
+  images from `brand/og-image.html`, then copies the SVGs into `app/` and `public/`.
+  **Never hand-edit the generated PNG/ICO files.**
+- Use `/logo-mark.svg` on light backgrounds and `/logo-mark-dark.svg` on navy. The
+  header shows the name and "Inspiring Minds, Shaping Futures" next to the mark from
+  `sm` up; below that they're screen-reader only, to avoid horizontal scrolling at
+  320px.
+- Update the share-image alt text (`app/*-image.alt.txt`) whenever the logo changes.
+
+## Analytics (Google tag)
+
+- Required for Google Ad Grants conversion tracking. It's off unless
+  `NEXT_PUBLIC_GA_MEASUREMENT_ID` or `NEXT_PUBLIC_GOOGLE_ADS_ID` is set; then
+  `GoogleTag` loads gtag.js and the CSP adds Google's hosts automatically (`lib/csp.ts`).
+- Track only through `trackEvent()` in `lib/analytics.ts`. Its event schema is a closed
+  set (`generate_lead { form }`, `donate_click { location }`). **Never send form values
+  or any PII**; extend the typed schema with enum-only params if you need a new event.
+- Google signals and ad personalization are disabled in the tag config (the audience
+  includes families of minors). Don't enable them.
+- After changing anything here, verify in a browser with test IDs that the console
+  shows no CSP violations.
 
 ## Production standards (must-follow)
 
 ### Security (form submission)
 
-These are implemented in `app/actions/submit-request-info.ts` and `lib/`. Keep them
-intact:
+These are implemented once in `lib/form-submission.ts` (used by every Server Action)
+and the schemas in `lib/`. Keep them intact:
 
-1. **Server-side validation** with `requestInfoSchema`: lengths, email format, grade
-   enum, and interests/programs restricted to the allowed lists.
-2. **HTML-escape every user value** in the email (`lib/email/escape-html.ts`). The
-   tests assert this, so add a test if you change the template.
+1. **Server-side validation** with the form's Zod schema: lengths, email format, and
+   enums for grades, interests, programs, and contact topics.
+2. **HTML-escape every user value** in the email. `renderEmail()` in
+   `lib/email/layout.ts` escapes everything it renders (labels, values, links, the
+   preheader), so templates pass plain strings and never build HTML themselves. The
+   tests assert this, so add a test if you change a template.
+   - The layout is table-based with inline styles and a fluid 600px container (plus an
+     Outlook-only fixed wrapper). Keep it that way: `div`/flexbox layouts, external CSS,
+     and `white-space: pre-wrap` break in Outlook and Gmail.
+   - Every email has an HTML part and a plain-text part, a preheader, a "Reply to …"
+     button (`mailto:` the validated address), and the received time in Detroit time.
 3. **Generic errors only** go back to the client. Log the cause with `console.error`,
    never the submission itself.
 4. **Abuse protection:** honeypot field (`website`) plus per-IP rate limiting (5 per 10
@@ -216,7 +312,8 @@ intact:
    If spam becomes a problem, move it to a shared store (e.g. Upstash Redis) or add
    Cloudflare Turnstile.
 5. Only schema-validated values may go into email headers (`replyTo` uses the
-   validated parent email). Free-text fields reject control characters (CR/LF, NUL).
+   validated email; contact subjects use the fixed topic label). Single-line fields
+   reject control characters; multi-line messages allow only tab and line breaks.
 6. **SMTP** requires TLS (`requireTLS` on STARTTLS ports, TLS 1.2 or newer) and has
    connect/socket timeouts so a slow server can't hang the function.
 7. **Headers** (`next.config.ts`): Content-Security-Policy, HSTS, `X-Frame-Options`,
@@ -234,9 +331,10 @@ intact:
 
 ### Privacy
 
-The form collects personal data about **minors**. Collect only what's needed, never log
-submissions or PII, and don't add analytics or third-party scripts that can read form
-fields.
+The request-info form collects personal data about **minors**. Collect only what's
+needed, never log submissions or PII, and never send form values to analytics. The
+`/privacy` page describes what we collect; update it whenever data collection, analytics,
+or processors change.
 
 ### Accessibility (WCAG 2.2 AA)
 
@@ -263,6 +361,12 @@ browser audit below; keep them intact.
   error text. Text over images needs a scrim (see the hero).
 - **Target size (2.5.8):** interactive targets are at least 24×24 px (checkboxes are
   `size-6`, and buttons and checkbox rows are `min-h-11`).
+- **Sticky header (2.4.11 Focus Not Obscured):** the header is `sticky` only when the
+  viewport is at least 500px tall, so it doesn't eat the screen on landscape phones or
+  at 400% zoom. `html { scroll-padding-top: 6rem }` (same breakpoint, in
+  `globals.css`) keeps focused elements and anchor targets clear of it. If the header
+  gets taller, raise that value. Keep the header background opaque so its text
+  contrast doesn't depend on the content underneath.
 - **Reflow (1.4.10):** no horizontal scrolling at 320 px wide; button rows use
   `flex-wrap`.
 - **Names:** decorative glyphs (arrows, asterisks) are wrapped in
@@ -284,11 +388,34 @@ browser audit below; keep them intact.
   must be listed in `images.remotePatterns`.
 - Videos use `preload='metadata'`. Don't add large binaries to git.
 
+## Google Ad Grants readiness
+
+Google reviews the website itself. Keep these true, and re-check them before any
+release:
+
+- Own domain over HTTPS (custom domain on Vercel, `NEXT_PUBLIC_SITE_URL` set), with
+  security headers.
+- Clear mission, and substantial written content for every program (a test enforces a
+  minimum per program).
+- Working navigation, links, and forms: `npm run check:links` must pass (CI runs it).
+- Mobile-friendly: no horizontal scrolling at 320px; 0 axe WCAG 2.2 AA violations.
+- Conversion tracking configured (Google tag IDs set), and the privacy policy is
+  accurate.
+- No commercial ads, no pop-ups, nothing that misrepresents the organization.
+
+### Launch blockers (client inputs)
+
+- Approve all `// DRAFT` copy, the consent notice
+  (`components/forms/consent-notice.tsx`), and the privacy policy (`app/privacy`).
+- Confirm the legal name "Future of the Youth" exactly matches the IRS
+  determination letter. Provide the EIN, a public contact email, and (optionally) a
+  phone number and mailing address.
+- Provide the real PayPal donation URL, the custom domain, and the GA4 / Google Ads IDs
+  and conversion labels.
+- Optional, for grant reviewers: founder story, team/board, social links.
+
 ## Known issues / follow-ups
 
-- **Legal copy:** `components/request-info-form/consent-notice.tsx` names "Johns
-  Hopkins Center for Talented Youth". It looks copied from a template. The organization
-  must review it; don't rewrite it without their sign-off.
 - **Large videos in git:** `public/video2.mp4` (~90 MB) and `video1.mp4` (~28 MB).
   Move them to external video hosting and add `poster` images.
 - **Video captions (WCAG 1.2.2, Level A — blocking):** both videos have audio
@@ -312,11 +439,12 @@ browser audit below; keep them intact.
 2. Before saying you're done, run `npm run check` (or at least typecheck + lint +
    test). Report failures honestly, with the output.
 3. Add or update tests alongside behavior changes, especially in `lib/` and the Server
-   Action.
+   Actions. New pages go in `lib/content/pages.ts` first.
 4. For UI changes, run `npm run dev` and check mobile (~375px) and desktop widths.
 5. Never commit secrets, `.env*` files (except `.env.example`), or large binaries. Don't
    commit or push unless asked. Branch off `main` for PRs.
 6. Copy, legal/consent text, testimonials, and donation links belong to the
-   organization. Change them only when explicitly asked.
+   organization. Change them only when explicitly asked, and mark any new copy you
+   write as `// DRAFT: client to approve`.
 7. When you add a dependency, script, env var, or top-level directory, update this
    file and the README in the same change.

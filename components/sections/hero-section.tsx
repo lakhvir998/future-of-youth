@@ -1,8 +1,10 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { RequestInfoForm } from '@/components/request-info-form/request-info-form';
+import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { HERO_HEADLINE, HERO_INTRO } from '@/lib/content';
+import { HERO_HEADLINE, HERO_INTRO } from '@/lib/content/home';
 import { REQUEST_INFO_ID } from '@/lib/site';
 
 export function HeroSection() {
@@ -31,6 +33,14 @@ export function HeroSection() {
         <p className='px-1 text-base font-medium text-ink sm:px-4 sm:text-lg md:text-xl'>
           {HERO_INTRO}
         </p>
+        <div className='flex flex-wrap justify-center gap-4'>
+          <Link href='/programs' className={buttonClasses()}>
+            Explore our programs
+          </Link>
+          <Link href='/donate' className={buttonClasses('secondary')}>
+            Donate
+          </Link>
+        </div>
         <Card
           id={REQUEST_INFO_ID}
           tabIndex={-1}

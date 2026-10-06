@@ -2,8 +2,15 @@
 
 import { useEffect, useRef, type FormEvent } from 'react';
 
+import {
+  FormAlert,
+  HoneypotField,
+  RequiredFieldsNote,
+} from '@/components/forms/form-parts';
+import { FormSuccess } from '@/components/forms/form-success';
+import { useFocusFirstInvalid } from '@/components/forms/use-focus-first-invalid';
+
 import { ChildStep } from './child-step';
-import { FormSuccess } from './form-success';
 import { ParentStep } from './parent-step';
 import { useRequestInfoForm } from './use-request-info-form';
 
@@ -22,16 +29,16 @@ export function RequestInfoForm() {
     stepStatusRef.current?.focus();
   }, [form.step]);
 
-  // After failed validation, send focus to the first invalid field so its
-  // label and error message are read out (WCAG 3.3.1).
-  useEffect(() => {
-    if (!form.failedAttempts) return;
-    formRef.current
-      ?.querySelector<HTMLElement>('[aria-invalid="true"]')
-      ?.focus();
-  }, [form.failedAttempts]);
+  useFocusFirstInvalid(formRef, form.failedAttempts);
 
-  if (form.isSubmitted) return <FormSuccess />;
+  if (form.isSubmitted) {
+    return (
+      <FormSuccess>
+        Your request has been sent successfully. We appreciate your interest and
+        will get back to you soon.
+      </FormSuccess>
+    );
+  }
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -55,26 +62,10 @@ export function RequestInfoForm() {
         <p ref={stepStatusRef} tabIndex={-1} className='focus:outline-hidden'>
           Step {form.step === 'parent' ? 1 : 2} of 2
         </p>
-        <p>
-          Fields marked <span aria-hidden='true'>*</span>{' '}
-          <span className='sr-only'>with an asterisk</span> are required.
-        </p>
+        <RequiredFieldsNote />
       </div>
 
-      {/* Honeypot: hidden from people and assistive tech; bots tend to fill it. */}
-      <div aria-hidden='true' className='hidden'>
-        <label>
-          Website
-          <input
-            type='text'
-            name='website'
-            tabIndex={-1}
-            autoComplete='off'
-            value={form.honeypot}
-            onChange={(e) => form.setHoneypot(e.target.value)}
-          />
-        </label>
-      </div>
+      <HoneypotField value={form.honeypot} onChange={form.setHoneypot} />
 
       {form.step === 'parent' ? (
         <ParentStep
@@ -93,10 +84,7 @@ export function RequestInfoForm() {
         />
       )}
 
-      {/* Always rendered so screen readers pick up the message when it appears. */}
-      <div role='alert' aria-atomic='true' className='text-sm text-red-700'>
-        {form.formError && <p>{form.formError}</p>}
-      </div>
+      <FormAlert message={form.formError} />
     </form>
   );
 }

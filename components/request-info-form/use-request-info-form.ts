@@ -1,6 +1,7 @@
 import { useState, useTransition } from 'react';
 
 import { submitRequestInfo } from '@/app/actions/submit-request-info';
+import { trackEvent } from '@/lib/analytics';
 import {
   childSchema,
   getFieldErrors,
@@ -110,6 +111,7 @@ export function useRequestInfoForm() {
         });
         if (result.ok) {
           setIsSubmitted(true);
+          trackEvent('generate_lead', { form: 'request_info' });
         } else {
           setFormError(result.message);
         }

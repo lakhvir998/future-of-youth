@@ -1,13 +1,15 @@
+import Link from 'next/link';
+
 import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { REQUEST_INFO_ID } from '@/lib/site';
+import { REQUEST_INFO_HREF } from '@/lib/site';
 
-/** Points back to the single form in the hero instead of rendering a second copy. */
+/** Points to the request-info form on the home page. */
 export function RequestInfoCtaSection() {
   return (
     <section
       aria-labelledby='request-info-cta-heading'
-      className='flex w-full flex-col items-center bg-surface px-4 py-10 md:py-16'
+      className='flex w-full flex-col items-center bg-surface px-4 py-12 md:py-16'
     >
       <Card className='max-w-xl text-center'>
         <h2
@@ -20,9 +22,9 @@ export function RequestInfoCtaSection() {
           Tell us about your child and we’ll share how our free programs can
           help them grow.
         </p>
-        <a href={`#${REQUEST_INFO_ID}`} className={buttonClasses()}>
+        <Link href={REQUEST_INFO_HREF} className={buttonClasses()}>
           Request Info
-        </a>
+        </Link>
       </Card>
     </section>
   );

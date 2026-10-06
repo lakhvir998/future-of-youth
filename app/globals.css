@@ -26,6 +26,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Keep anchor targets and keyboard-focused elements clear of the sticky header
+   (WCAG 2.4.11 Focus Not Obscured). Matches the header's sticky breakpoint. */
+@media (min-height: 500px) {
+  html {
+    scroll-padding-top: 6rem;
+  }
+}
+
 body {
   background: #ffffff;
   color: var(--color-ink);

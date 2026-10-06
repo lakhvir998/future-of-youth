@@ -21,6 +21,8 @@ const data: RequestInfo = {
   },
 };
 
+const submittedAt = new Date('2026-10-06T19:42:00Z');
+
 describe('escapeHtml', () => {
   it('escapes all HTML-significant characters', () => {
     expect(escapeHtml(`<a href="x">'&'</a>`)).toBe(
@@ -30,20 +32,33 @@ describe('escapeHtml', () => {
 });
 
 describe('buildRequestInfoEmail', () => {
-  it('escapes user input in the HTML body', () => {
-    const { html } = buildRequestInfoEmail(data);
+  const email = buildRequestInfoEmail(data, submittedAt);
 
-    expect(html).not.toContain('<img src=x');
-    expect(html).not.toContain('<b>Kid</b>');
-    expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
-    expect(html).toContain('O&quot;Brien &amp; Sons');
+  it('escapes user input everywhere in the HTML, including the preheader', () => {
+    expect(email.html).not.toContain('<img src=x');
+    expect(email.html).not.toContain('<b>Kid</b>');
+    expect(email.html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+    expect(email.html).toContain('O&quot;Brien &amp; Sons');
+  });
+
+  it('uses only the validated grade in the subject', () => {
+    expect(email.subject).toBe('New Program Info Request: Grade 5');
+  });
+
+  it('adds a reply button addressed to the parent', () => {
+    expect(email.html).toContain(
+      'href="mailto:parent@example.com?subject=Your%20Future%20of%20the%20Youth%20program%20info%20request"'
+    );
   });
 
   it('includes a plain-text alternative with every field', () => {
-    const { text, subject } = buildRequestInfoEmail(data);
-
-    expect(subject).toBe('New Program Info Request');
-    expect(text).toContain('Academic Interests: Mathematics, Language Arts');
-    expect(text).toContain('Grade: 5');
+    expect(email.text).toContain(
+      'Academic interests: Mathematics, Language Arts'
+    );
+    expect(email.text).toContain('Grade: 5');
+    expect(email.text).toContain('Program preferences: Online Programs');
+    expect(email.text).toContain(
+      'Received Tuesday, October 6, 2026 at 3:42 PM (Detroit time)'
+    );
   });
 });

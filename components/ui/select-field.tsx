@@ -3,12 +3,18 @@ import { useId, type ComponentProps } from 'react';
 import { FieldError } from './field-error';
 import { inputClasses } from './text-field';
 
+export type SelectOption = string | { value: string; label: string };
+
 type SelectFieldProps = Omit<ComponentProps<'select'>, 'id' | 'children'> & {
   label: string;
   placeholder: string;
-  options: readonly string[];
+  options: readonly SelectOption[];
   error?: string;
 };
+
+function normalize(option: SelectOption) {
+  return typeof option === 'string' ? { value: option, label: option } : option;
+}
 
 export function SelectField({
   label,
@@ -36,9 +42,9 @@ export function SelectField({
         {...props}
       >
         <option value=''>{placeholder}</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+        {options.map(normalize).map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
           </option>
         ))}
       </select>

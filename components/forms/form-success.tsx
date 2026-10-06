@@ -1,6 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 
-export function FormSuccess() {
+type FormSuccessProps = {
+  title?: string;
+  children: ReactNode;
+};
+
+export function FormSuccess({
+  title = 'Thank you!',
+  children,
+}: FormSuccessProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   // The form (and the focused Submit button) just unmounted; move focus here
@@ -29,12 +37,9 @@ export function FormSuccess() {
         tabIndex={-1}
         className='text-2xl font-bold text-green-700 focus:outline-hidden'
       >
-        Thank you!
+        {title}
       </h3>
-      <p className='max-w-md text-center text-lg text-gray-700'>
-        Your request has been sent successfully. We appreciate your interest and
-        will get back to you soon.
-      </p>
+      <p className='max-w-md text-center text-lg text-gray-700'>{children}</p>
     </div>
   );
 }

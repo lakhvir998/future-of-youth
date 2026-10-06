@@ -1,7 +1,9 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
+import { buildContactEmail } from '@/lib/email/contact-email';
 import { buildRequestInfoEmail } from '@/lib/email/request-info-email';
 import { getServerEnv } from '@/lib/env';
+import type { Contact } from '@/lib/contact';
 import type { RequestInfo } from '@/lib/request-info';
 
 let transporter: Transporter | undefined;
@@ -25,17 +27,35 @@ function getTransporter() {
   return transporter;
 }
 
-export async function sendRequestInfoEmail(data: RequestInfo) {
+type Email = {
+  subject: string;
+  html: string;
+  text: string;
+  /** Must be a schema-validated address; it becomes a header value. */
+  replyTo: string;
+};
+
+/** Sends a notification email to the staff inbox (FORM_TO_EMAIL). */
+export async function sendEmail({ subject, html, text, replyTo }: Email) {
   const env = getServerEnv();
-  const { subject, html, text } = buildRequestInfoEmail(data);
 
   await getTransporter().sendMail({
     from: env.SMTP_FROM ?? env.SMTP_USER,
     to: env.FORM_TO_EMAIL,
-    // Validated by the schema, so safe to use as a header value.
-    replyTo: data.parent.email,
+    replyTo,
     subject,
     html,
     text,
   });
+}
+
+export async function sendRequestInfoEmail(data: RequestInfo) {
+  await sendEmail({
+    ...buildRequestInfoEmail(data),
+    replyTo: data.parent.email,
+  });
+}
+
+export async function sendContactEmail(data: Contact) {
+  await sendEmail({ ...buildContactEmail(data), replyTo: data.email });
 }

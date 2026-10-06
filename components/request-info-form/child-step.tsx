@@ -1,3 +1,4 @@
+import { ConsentNotice } from '@/components/forms/consent-notice';
 import { Button } from '@/components/ui/button';
 import { CheckboxGroup } from '@/components/ui/checkbox-group';
 import { SelectField } from '@/components/ui/select-field';
@@ -9,7 +10,6 @@ import {
   type FieldErrors,
 } from '@/lib/request-info';
 
-import { ConsentNotice } from './consent-notice';
 import type { ChildFormState } from './use-request-info-form';
 
 type ChildStepProps = {

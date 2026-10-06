@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+import { emailSchema, requiredText } from '@/lib/validation';
+
+export {
+  getFieldErrors,
+  type FieldErrors,
+  type SubmitResult as SubmitRequestInfoResult,
+} from '@/lib/validation';
+
 // Shared by the client form and the server action so validation can't drift.
 
 export const ACADEMIC_INTERESTS = [
@@ -8,6 +16,10 @@ export const ACADEMIC_INTERESTS = [
   'Language Arts',
   'Mathematics',
   'Science and Engineering',
+  // Program areas added for the 2026 program lineup.
+  'AI & Technology',
+  'Entrepreneurship',
+  'Financial Literacy',
 ] as const;
 
 export const PROGRAM_PREFERENCES = [
@@ -29,31 +41,10 @@ export const GRADES = [
   '12',
 ] as const;
 
-const NAME_MAX_LENGTH = 100;
-// Matches C0/C1 control characters, including CR/LF and NUL.
-const CONTROL_CHARS = /[\u0000-\u001f\u007f-\u009f]/;
-
-function requiredText(label: string) {
-  return z
-    .string()
-    .trim()
-    .min(1, `${label} is required.`)
-    .max(
-      NAME_MAX_LENGTH,
-      `${label} must be ${NAME_MAX_LENGTH} characters or fewer.`
-    )
-    .refine((value) => !CONTROL_CHARS.test(value), {
-      error: `${label} contains invalid characters.`,
-    });
-}
-
 export const parentSchema = z.object({
   first: requiredText('First name'),
   last: requiredText('Last name'),
-  email: z
-    .string()
-    .trim()
-    .pipe(z.email('Enter a valid email address.').max(254)),
+  email: emailSchema,
   state: requiredText('State'),
 });
 
@@ -85,24 +76,3 @@ export type ParentInput = z.input<typeof parentSchema>;
 export type ChildInput = z.input<typeof childSchema>;
 export type RequestInfoInput = z.input<typeof requestInfoSchema>;
 export type RequestInfo = z.output<typeof requestInfoSchema>;
-
-export type FieldErrors<T> = Partial<Record<keyof T, string>>;
-
-export type SubmitRequestInfoResult =
-  { ok: true } | { ok: false; message: string };
-
-/** Returns the first error message per field, or null when the data is valid. */
-export function getFieldErrors<T extends z.ZodType>(
-  schema: T,
-  data: unknown
-): FieldErrors<z.input<T>> | null {
-  const result = schema.safeParse(data);
-  if (result.success) return null;
-
-  const errors: Record<string, string> = {};
-  for (const issue of result.error.issues) {
-    const key = issue.path[0];
-    if (typeof key === 'string' && !errors[key]) errors[key] = issue.message;
-  }
-  return errors as FieldErrors<z.input<T>>;
-}

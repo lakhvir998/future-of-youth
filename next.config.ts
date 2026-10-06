@@ -1,30 +1,13 @@
 import type { NextConfig } from 'next';
 
-const isDev = process.env.NODE_ENV === 'development';
-// Vercel preview deployments inject the comments/feedback toolbar.
-const isVercelPreview = process.env.VERCEL_ENV === 'preview';
-const vercelLive = isVercelPreview ? ' https://vercel.live' : '';
+import { isAnalyticsEnabled } from './lib/analytics-config';
+import { buildContentSecurityPolicy } from './lib/csp';
 
-// The page is statically prerendered, so nonces aren't available; inline
-// scripts (Next's bootstrap and JSON-LD) need 'unsafe-inline'. Everything else
-// is locked to our own origin.
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}${vercelLive}`,
-  `style-src 'self' 'unsafe-inline'${vercelLive}`,
-  `img-src 'self' data: blob:${vercelLive}`,
-  "font-src 'self'",
-  "media-src 'self'",
-  `connect-src 'self'${isDev ? ' ws:' : ''}${vercelLive}${isVercelPreview ? ' wss://ws-us3.pusher.com' : ''}`,
-  `frame-src ${isVercelPreview ? 'https://vercel.live' : "'none'"}`,
-  "worker-src 'self' blob:",
-  "manifest-src 'self'",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-  ...(isDev ? [] : ['upgrade-insecure-requests']),
-].join('; ');
+const contentSecurityPolicy = buildContentSecurityPolicy({
+  isDev: process.env.NODE_ENV === 'development',
+  isVercelPreview: process.env.VERCEL_ENV === 'preview',
+  googleTag: isAnalyticsEnabled(),
+});
 
 const securityHeaders = [
   { key: 'Content-Security-Policy', value: contentSecurityPolicy },

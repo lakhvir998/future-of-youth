@@ -12,6 +12,11 @@ export default defineConfig([
       '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
+  {
+    // CLI scripts report results on stdout.
+    files: ['scripts/**'],
+    rules: { 'no-console': 'off' },
+  },
   globalIgnores([
     '.next/**',
     'out/**',

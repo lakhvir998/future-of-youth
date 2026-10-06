@@ -1,11 +1,12 @@
 # Future of the Youth
 
-Landing page for **Future of the Youth**, a Detroit nonprofit offering free tutoring,
-mentorship, financial literacy, and entrepreneurship programs to minority and
-underserved youth.
+Website for **Future of the Youth**, a Detroit 501(c)(3) nonprofit preparing
+minority and underserved youth for the future through free AI & technology,
+entrepreneurship, financial literacy, mentorship, and youth development programs.
 
-Visitors can learn about the program, request program info through a two-step form
-(emailed to staff over SMTP), and donate through PayPal.
+Pages: Home, About, Programs (with a page per program), AI & Technology, Get Involved,
+Donate, Contact, and Privacy. Families can request program info, anyone can send a
+contact message (both emailed to staff over SMTP), and donors give through PayPal.
 
 ## Tech stack
 
@@ -31,16 +32,18 @@ Without valid SMTP settings the page still renders, but form submissions show a
 
 ## Scripts
 
-| Command             | What it does                                               |
-| ------------------- | ---------------------------------------------------------- |
-| `npm run dev`       | Start the dev server                                       |
-| `npm run build`     | Production build                                           |
-| `npm run start`     | Serve the production build                                 |
-| `npm run typecheck` | Type-check with `tsc`                                      |
-| `npm run lint`      | Lint with ESLint (`lint:fix` to auto-fix)                  |
-| `npm run format`    | Format with Prettier (`format:check` to verify only)       |
-| `npm test`          | Run unit and component tests (`test:watch` for watch mode) |
-| `npm run check`     | Everything CI runs: typecheck, lint, format, test, build   |
+| Command               | What it does                                                    |
+| --------------------- | --------------------------------------------------------------- |
+| `npm run dev`         | Start the dev server                                            |
+| `npm run build`       | Production build                                                |
+| `npm run start`       | Serve the production build                                      |
+| `npm run typecheck`   | Type-check with `tsc`                                           |
+| `npm run lint`        | Lint with ESLint (`lint:fix` to auto-fix)                       |
+| `npm run format`      | Format with Prettier (`format:check` to verify only)            |
+| `npm test`            | Run unit and component tests (`test:watch` for watch mode)      |
+| `npm run brand:build` | Rebuild all logo/icon PNGs and the share image from `brand/`    |
+| `npm run check:links` | After a build: crawl the site and fail on broken links          |
+| `npm run check`       | Everything CI runs: typecheck, lint, format, test, build, links |
 
 ## Environment variables
 
@@ -52,26 +55,19 @@ URLs, the sitemap, and social previews point at it.
 ## Project structure
 
 ```
-app/
-  layout.tsx                    Root layout, fonts, metadata
-  page.tsx                      Composes the landing page sections (Server Component)
-  robots.ts, sitemap.ts, manifest.ts, llms.txt/   SEO and AI-crawler metadata
-  favicon.ico, icon.png, apple-icon.png, opengraph-image.png   Icons and share image
-  actions/submit-request-info.ts  Server Action: validate, rate-limit, send email
-components/
-  layout/                       Site header and footer
-  sections/                     One component per page section
-  request-info-form/            The only client component: form, steps, state hook
-  seo/                          JSON-LD structured data
-  ui/                           Button, Card, TextField, SelectField, CheckboxGroup
-lib/
-  request-info.ts               Zod schema + option lists shared by client and server
-  content.ts, site.ts           Shared page copy and site constants (name, URL helpers)
-  env.ts                        Validated server env vars
-  mailer.ts                     Nodemailer transport + send
-  email/                        HTML-escaped email template
-  rate-limit.ts                 Best-effort in-memory rate limiter
+app/                Routes (each page is statically prerendered), Server Actions,
+                    sitemap/robots/manifest/llms.txt, icons and share images
+components/         layout (header, nav, footer), sections, forms, ui primitives,
+                    analytics, seo (JSON-LD)
+lib/content/        All site copy and the page registry (navigation, metadata, sitemap)
+lib/                Validation schemas, mailer, email templates, analytics, CSP, SEO helpers
+brand/              Logo source (SVG generator + share-image template)
+scripts/            Link checker and brand asset builder
+test/               Shared test helpers (axe accessibility checks)
 ```
+
+See [AGENTS.md](AGENTS.md) for architecture, conventions, and the Google Ad Grants
+launch checklist.
 
 ## Deployment
 

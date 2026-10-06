@@ -1,9 +1,16 @@
-import { HERO_HEADLINE, HERO_INTRO, MISSION_STATEMENT } from '@/lib/content';
-import { ACADEMIC_INTERESTS, PROGRAM_PREFERENCES } from '@/lib/request-info';
+import { AI_TECH_INTRO, AI_TOPICS } from '@/lib/content/ai-technology';
+import {
+  HERO_HEADLINE,
+  HERO_INTRO,
+  MISSION_STATEMENT,
+} from '@/lib/content/home';
+import { NONPROFIT_STATEMENT } from '@/lib/content/organization';
+import { PAGES } from '@/lib/content/pages';
+import { PROGRAMS } from '@/lib/content/programs';
 import {
   getPaypalUrl,
   getSiteUrl,
-  REQUEST_INFO_ID,
+  REQUEST_INFO_HREF,
   SITE_DESCRIPTION,
   SITE_NAME,
 } from '@/lib/site';
@@ -11,16 +18,17 @@ import {
 export const dynamic = 'force-static';
 
 // llms.txt (https://llmstxt.org): a plain-text summary for AI answer engines,
-// built from the same copy the page renders.
+// built from the same copy the pages render.
 export function GET() {
   const siteUrl = getSiteUrl();
+  const url = (path: string) => new URL(path, siteUrl).toString();
   const paypalUrl = getPaypalUrl();
-  const list = (items: readonly string[]) =>
-    items.map((item) => `- ${item}`).join('\n');
 
   const body = `# ${SITE_NAME}
 
 > ${SITE_DESCRIPTION}
+
+${NONPROFIT_STATEMENT}
 
 ## ${HERO_HEADLINE}
 
@@ -32,18 +40,26 @@ ${MISSION_STATEMENT}
 
 ## Programs
 
-${list(PROGRAM_PREFERENCES)}
+${PROGRAMS.map((program) => `- [${program.title}](${url(program.href)}): ${program.summary}`).join('\n')}
 
-## Academic Interests
+## AI & Technology
 
-${list(ACADEMIC_INTERESTS)}
+${AI_TECH_INTRO}
 
-## Links
+${AI_TOPICS.map((topic) => `- ${topic.title}: ${topic.description}`).join('\n')}
 
-- [Home](${new URL('/', siteUrl)})
-- [Request Free Program Info](${new URL(`/#${REQUEST_INFO_ID}`, siteUrl)})${
-    paypalUrl ? `\n- [Support the Youth](${paypalUrl})` : ''
-  }
+## Pages
+
+${Object.values(PAGES)
+  .map((page) => `- [${page.label}](${url(page.path)}): ${page.description}`)
+  .join('\n')}
+
+## Take Action
+
+- [Request Free Program Info](${url(REQUEST_INFO_HREF)})
+- [Donate](${url('/donate')})${paypalUrl ? `\n- [Donate with PayPal](${paypalUrl})` : ''}
+- [Get Involved](${url('/get-involved')})
+- [Contact](${url('/contact')})
 `;
 
   return new Response(body, {
