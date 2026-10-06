@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Future of the Youth
 
-## Getting Started
+Landing page for **Future of the Youth**, a Detroit nonprofit offering free tutoring,
+mentorship, financial literacy, and entrepreneurship programs to minority and
+underserved youth.
 
-First, run the development server:
+Visitors can learn about the program, request program info through a two-step form
+(emailed to staff over SMTP), and donate through PayPal.
+
+## Tech stack
+
+- [Next.js 16](https://nextjs.org) (App Router, Server Components, Server Actions)
+- React 19, TypeScript 6 (strict)
+- Tailwind CSS v4
+- Zod for validation (shared between client and server)
+- Nodemailer for email
+- Vitest + Testing Library, ESLint, Prettier, GitHub Actions CI
+
+## Getting started
+
+Requires Node.js 20.9+ (24 recommended; see `.nvmrc`).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then fill in real SMTP values
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Without valid SMTP settings the page still renders, but form submissions show a
+"could not send" error.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command             | What it does                                               |
+| ------------------- | ---------------------------------------------------------- |
+| `npm run dev`       | Start the dev server                                       |
+| `npm run build`     | Production build                                           |
+| `npm run start`     | Serve the production build                                 |
+| `npm run typecheck` | Type-check with `tsc`                                      |
+| `npm run lint`      | Lint with ESLint (`lint:fix` to auto-fix)                  |
+| `npm run format`    | Format with Prettier (`format:check` to verify only)       |
+| `npm test`          | Run unit and component tests (`test:watch` for watch mode) |
+| `npm run check`     | Everything CI runs: typecheck, lint, format, test, build   |
 
-## Learn More
+## Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+See [`.env.example`](.env.example). SMTP variables are server-only. `NEXT_PUBLIC_*`
+variables are inlined into the client bundle at build time, so they must never hold
+secrets. In production, set `NEXT_PUBLIC_SITE_URL` to the real domain so canonical
+URLs, the sitemap, and social previews point at it.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  layout.tsx                    Root layout, fonts, metadata
+  page.tsx                      Composes the landing page sections (Server Component)
+  robots.ts, sitemap.ts, manifest.ts, llms.txt/   SEO and AI-crawler metadata
+  favicon.ico, icon.png, apple-icon.png, opengraph-image.png   Icons and share image
+  actions/submit-request-info.ts  Server Action: validate, rate-limit, send email
+components/
+  layout/                       Site header and footer
+  sections/                     One component per page section
+  request-info-form/            The only client component: form, steps, state hook
+  seo/                          JSON-LD structured data
+  ui/                           Button, Card, TextField, SelectField, CheckboxGroup
+lib/
+  request-info.ts               Zod schema + option lists shared by client and server
+  content.ts, site.ts           Shared page copy and site constants (name, URL helpers)
+  env.ts                        Validated server env vars
+  mailer.ts                     Nodemailer transport + send
+  email/                        HTML-escaped email template
+  rate-limit.ts                 Best-effort in-memory rate limiter
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployed on Vercel. Set the environment variables from `.env.example` in the Vercel
+project settings. CI (`.github/workflows/ci.yml`) runs `npm run check` steps on every
+push to `main` and on every pull request.

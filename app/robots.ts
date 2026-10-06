@@ -1,0 +1,14 @@
+import type { MetadataRoute } from 'next';
+
+import { getSiteUrl } from '@/lib/site';
+
+// Search engines and AI answer engines are welcome to index the public page.
+export default function robots(): MetadataRoute.Robots {
+  const siteUrl = getSiteUrl();
+
+  return {
+    rules: [{ userAgent: '*', allow: '/', disallow: ['/_next/', '/api/'] }],
+    sitemap: new URL('/sitemap.xml', siteUrl).toString(),
+    host: siteUrl.origin,
+  };
+}
