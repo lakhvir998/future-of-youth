@@ -21,7 +21,7 @@ export function ProgramCard({
         href={program.href}
         className='inline-flex min-h-11 items-center gap-1 self-start rounded-md font-semibold text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-hidden'
       >
-        Learn more<span className='sr-only'> about {program.title}</span>
+        Learn more <span className='sr-only'>about {program.title}</span>
         <span aria-hidden='true'>→</span>
       </Link>
     </article>

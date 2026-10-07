@@ -14,6 +14,8 @@ import {
 import {
   MISSION_PARAGRAPHS,
   MISSION_TITLE,
+  VISION_PARAGRAPHS,
+  VISION_TITLE,
   ORIGINAL_INTRO,
 } from '@/lib/content/home';
 import {
@@ -54,7 +56,15 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section id='approach' title='Our Approach'>
+      <Section id='vision' title={VISION_TITLE}>
+        <div className='max-w-3xl space-y-4 text-lg text-ink'>
+          {VISION_PARAGRAPHS.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </Section>
+
+      <Section id='approach' title='Our Approach' tone='white'>
         <div className='max-w-3xl space-y-4 text-lg text-ink'>
           <p>{ORIGINAL_INTRO}</p>
           <p>
@@ -69,14 +79,14 @@ export default function AboutPage() {
         </Link>
       </Section>
 
-      <Section id='who-we-serve' title='Who We Serve' tone='white'>
+      <Section id='who-we-serve' title='Who We Serve'>
         <p className='max-w-3xl text-lg text-ink'>{WHO_WE_SERVE}</p>
       </Section>
 
-      <Section id='values' title='Our Values'>
+      <Section id='values' title='Our Values' tone='white'>
         <ul className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
           {VALUES.map((value) => (
-            <li key={value.title} className='rounded-xl bg-white p-6 shadow-sm'>
+            <li key={value.title} className='rounded-xl bg-surface p-6'>
               <h3 className='text-lg font-bold text-navy'>{value.title}</h3>
               <p className='mt-2 text-ink'>{value.description}</p>
             </li>
@@ -84,7 +94,7 @@ export default function AboutPage() {
         </ul>
       </Section>
 
-      <Section id='nonprofit-status' title='Nonprofit Status' tone='white'>
+      <Section id='nonprofit-status' title='Nonprofit Status'>
         <div className='max-w-3xl space-y-3 text-lg text-ink'>
           <p>
             <strong>{NONPROFIT_STATEMENT}</strong> {TAX_DEDUCTIBLE_STATEMENT}

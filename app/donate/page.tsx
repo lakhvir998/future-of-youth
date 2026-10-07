@@ -7,8 +7,9 @@ import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Section } from '@/components/ui/section';
 import {
-  DONATE_INTRO,
-  IMPACT_AREAS,
+  DONATE_PARAGRAPHS,
+  DONATE_TITLE,
+  DONATION_USES,
   OTHER_WAYS_TO_GIVE,
 } from '@/lib/content/donate';
 import {
@@ -38,28 +39,25 @@ export default function DonatePage() {
         breadcrumbs={breadcrumbs}
       />
       <PageHero
-        title='Support Detroit Youth'
-        intro={<p>{DONATE_INTRO}</p>}
+        title={DONATE_TITLE}
+        intro={<p>{DONATE_PARAGRAPHS[0]}</p>}
         breadcrumbs={breadcrumbs}
       >
         {paypalUrl && <PaypalButton href={paypalUrl} location='donate_page' />}
       </PageHero>
 
       <Section
-        id='what-your-gift-supports'
-        title='What Your Gift Supports'
-        intro={
-          <p>
-            Every contribution goes toward keeping our programs free and
-            accessible for Detroit students and their families.
-          </p>
-        }
+        id='what-donations-support'
+        title='What Donations Support'
+        intro={<p>{DONATE_PARAGRAPHS[1]}</p>}
       >
-        <ul className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-          {IMPACT_AREAS.map((area) => (
-            <li key={area.title} className='rounded-xl bg-white p-6 shadow-sm'>
-              <h3 className='text-lg font-bold text-navy'>{area.title}</h3>
-              <p className='mt-2 text-ink'>{area.description}</p>
+        <ul className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+          {DONATION_USES.map((use) => (
+            <li
+              key={use}
+              className='rounded-xl border-l-4 border-l-brand bg-white p-5 font-semibold text-navy shadow-sm'
+            >
+              {use}
             </li>
           ))}
         </ul>
@@ -67,13 +65,13 @@ export default function DonatePage() {
 
       <Section id='give-online' title='Give Online' tone='white'>
         <Card accent='accent' className='max-w-2xl items-start text-left'>
+          <p className='text-lg text-ink'>{DONATE_PARAGRAPHS[2]}</p>
           {paypalUrl ? (
             <>
-              <p className='text-lg text-ink'>
-                Donations are processed securely by PayPal and open in a new
-                tab.
-              </p>
               <PaypalButton href={paypalUrl} location='donate_page' />
+              <p className='text-sm text-gray-700'>
+                Donations are processed securely by PayPal.
+              </p>
             </>
           ) : (
             <p className='text-lg text-ink'>

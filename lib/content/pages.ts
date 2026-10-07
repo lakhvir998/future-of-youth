@@ -68,7 +68,7 @@ export const PAGES: Record<PagePath, PageInfo> = {
     label: 'Donate',
     title: 'Donate',
     description:
-      'Support free entrepreneurship, financial literacy, AI & technology, and career & leadership programs for Detroit youth. Future of the Youth Limited is a 501(c)(3) nonprofit.',
+      'Invest in the Future: donations support educational programming, technology, learning materials, instructors, workshops, outreach, and program expansion for youth.',
     inNav: true,
   },
   '/contact': {

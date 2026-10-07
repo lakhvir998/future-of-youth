@@ -2,7 +2,10 @@ import { AI_TECH_INTRO, AI_TOPICS } from '@/lib/content/ai-technology';
 import {
   HERO_HEADLINE,
   HERO_INTRO,
+  IMPACT_PARAGRAPHS,
+  IMPACT_TITLE,
   MISSION_STATEMENT,
+  VISION_PARAGRAPHS,
 } from '@/lib/content/home';
 import { NONPROFIT_STATEMENT } from '@/lib/content/organization';
 import { PAGES } from '@/lib/content/pages';
@@ -38,6 +41,14 @@ ${HERO_INTRO}
 
 ${MISSION_STATEMENT}
 
+## Our Vision
+
+${VISION_PARAGRAPHS.join(' ')}
+
+## ${IMPACT_TITLE}
+
+${IMPACT_PARAGRAPHS.join(' ')}
+
 ## Programs
 
 ${PROGRAMS.map((program) => `- [${program.title}](${url(program.href)}): ${program.summary}`).join('\n')}
@@ -57,7 +68,7 @@ ${Object.values(PAGES)
 ## Take Action
 
 - [Request Free Program Info](${url(REQUEST_INFO_HREF)})
-- [Donate](${url('/donate')})${paypalUrl ? `\n- [Donate with PayPal](${paypalUrl})` : ''}
+- [Donate](${url('/donate')})${paypalUrl ? `\n- [Donate Now (PayPal)](${paypalUrl})` : ''}
 - [Get Involved](${url('/get-involved')})
 - [Contact](${url('/contact')})
 `;

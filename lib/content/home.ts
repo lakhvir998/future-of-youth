@@ -25,6 +25,32 @@ export const MISSION_PARAGRAPHS = [
 /** Single-string form for structured data and llms.txt. */
 export const MISSION_STATEMENT = MISSION_PARAGRAPHS.join(' ');
 
+// Vision: the client's exact wording.
+export const VISION_TITLE = 'Our Vision';
+
+export const VISION_PARAGRAPHS = [
+  'We envision communities where young people have access to the financial knowledge, entrepreneurial skills, emerging technology education, and mentorship needed to compete in tomorrow’s economy.',
+  'Our long-term vision is to expand Future of the Youth programming into communities across the country and create pathways for thousands of young people to become entrepreneurs, technology leaders, professionals, and financially empowered adults.',
+] as const;
+
+// Impact: the client's exact wording. Per the client, this section describes
+// goals and growth plans only. Never add statistics or results here that the
+// organization hasn't achieved and confirmed.
+export const IMPACT_TITLE = 'Building for Impact';
+
+export const IMPACT_PARAGRAPHS = [
+  'Future of the Youth is building partnerships with businesses, community organizations, educators, technology companies, financial institutions, and supporters who believe in investing in the next generation.',
+  'As we grow, our goal is to expand programming, increase the number of youth served, provide greater access to technology, and bring entrepreneurship, financial literacy, and AI education to additional communities.',
+] as const;
+
+// The four goals from the client's second paragraph, as a scannable list.
+export const IMPACT_GOALS = [
+  'Expand programming',
+  'Increase the number of youth served',
+  'Provide greater access to technology',
+  'Bring entrepreneurship, financial literacy, and AI education to additional communities',
+] as const;
+
 // DRAFT: client to approve.
 export const PROGRAMS_INTRO =
   'Every program is free for participating families and is designed to work together, so students grow academically, financially, and personally at the same time.';

@@ -2,7 +2,8 @@ import { AiHighlight } from '@/components/sections/ai-highlight';
 import { DonateCta } from '@/components/sections/donate-cta';
 import { FeaturesSection } from '@/components/sections/features-section';
 import { HeroSection } from '@/components/sections/hero-section';
-import { MissionSection } from '@/components/sections/mission-section';
+import { ImpactSection } from '@/components/sections/impact-section';
+import { MissionVisionSection } from '@/components/sections/mission-vision-section';
 import { ProgramsOverview } from '@/components/sections/programs-overview';
 import { TestimonialSection } from '@/components/sections/testimonial-section';
 import { StructuredData } from '@/components/seo/structured-data';
@@ -30,9 +31,10 @@ export default function HomePage() {
       <HeroSection />
       <ProgramsOverview />
       <AiHighlight />
-      <MissionSection />
+      <MissionVisionSection />
       <FeaturesSection />
       <TestimonialSection />
+      <ImpactSection />
       <DonateCta />
     </>
   );

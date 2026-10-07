@@ -1,38 +1,26 @@
-// DRAFT: client to approve. Lists what donations support using only activities
-// the organization already describes; no dollar-amount impact claims.
+// Donation messaging: the client's exact wording.
+export const DONATE_TITLE = 'Invest in the Future';
 
-export const DONATE_INTRO =
-  'Help us nurture the next generation of bright minds. Your contribution keeps our programs free for Detroit families and gives young people the skills, support, and opportunities to build a brighter future.';
+export const DONATE_PARAGRAPHS = [
+  'Your support helps Future of the Youth provide young people with access to entrepreneurship education, financial literacy, artificial intelligence training, technology, mentorship, and career-development opportunities.',
+  'Donations can help support educational programming, computers and technology, learning materials, instructors, workshops, community outreach, and program expansion.',
+  'Every contribution helps us create more opportunities for the next generation.',
+] as const;
 
-export type ImpactArea = { title: string; description: string };
+/** Displayed in capitals via CSS, so screen readers don't spell it out. */
+export const DONATE_BUTTON_LABEL = 'Donate Now';
 
-export const IMPACT_AREAS: ImpactArea[] = [
-  {
-    title: 'AI & technology education',
-    description:
-      'Devices, software, and learning materials so students can learn AI, cybersecurity, and digital skills hands-on.',
-  },
-  {
-    title: 'Entrepreneurship & financial literacy',
-    description:
-      'Workshops and real-world learning experiences that teach students how to manage money and start a business.',
-  },
-  {
-    title: 'Tutoring & academic support',
-    description:
-      'Personalized support that helps students close learning gaps and build a strong academic foundation.',
-  },
-  {
-    title: 'Free, nutritious meals',
-    description:
-      'Lunches served during all sessions, so every child can focus and thrive.',
-  },
-  {
-    title: 'Career & leadership development',
-    description:
-      'Mentoring and hands-on practice in communication, leadership, and professional skills.',
-  },
-];
+// The items from the client's second paragraph, shown as a scannable list.
+export const DONATION_USES = [
+  'Educational programming',
+  'Computers and technology',
+  'Learning materials',
+  'Instructors',
+  'Workshops',
+  'Community outreach',
+  'Program expansion',
+] as const;
 
+// DRAFT: client to approve.
 export const OTHER_WAYS_TO_GIVE =
   'Interested in sponsoring a program, making an in-kind donation, or giving through your employer? Contact us and we will be glad to help.';

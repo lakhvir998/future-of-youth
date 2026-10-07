@@ -3,6 +3,7 @@
 import { buttonClasses } from '@/components/ui/button';
 import { trackEvent } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
+import { DONATE_BUTTON_LABEL } from '@/lib/content/donate';
 
 type PaypalButtonProps = {
   href: string;
@@ -10,7 +11,10 @@ type PaypalButtonProps = {
   className?: string;
 };
 
-/** Outbound PayPal link that records a donate_click conversion (no PII). */
+/**
+ * The prominent "Donate Now" button: an outbound link to the official PayPal
+ * donation page that records a donate_click conversion (no PII).
+ */
 export function PaypalButton({ href, location, className }: PaypalButtonProps) {
   return (
     <a
@@ -18,10 +22,14 @@ export function PaypalButton({ href, location, className }: PaypalButtonProps) {
       target='_blank'
       rel='noopener noreferrer'
       onClick={() => trackEvent('donate_click', { location })}
-      className={cn(buttonClasses(), className)}
+      className={cn(
+        buttonClasses('accent'),
+        'px-10 py-4 text-xl tracking-wide uppercase',
+        className
+      )}
     >
-      Donate with PayPal
-      <span className='sr-only'> (opens in a new tab)</span>
+      {DONATE_BUTTON_LABEL}{' '}
+      <span className='sr-only'>(opens PayPal in a new tab)</span>
     </a>
   );
 }
