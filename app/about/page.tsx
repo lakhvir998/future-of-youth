@@ -11,7 +11,11 @@ import {
   VALUES,
   WHO_WE_SERVE,
 } from '@/lib/content/about';
-import { MISSION_STATEMENT, ORIGINAL_INTRO } from '@/lib/content/home';
+import {
+  MISSION_PARAGRAPHS,
+  MISSION_TITLE,
+  ORIGINAL_INTRO,
+} from '@/lib/content/home';
 import {
   getContactInfo,
   NONPROFIT_STATEMENT,
@@ -42,17 +46,22 @@ export default function AboutPage() {
         breadcrumbs={breadcrumbs}
       />
 
-      <Section id='mission' title='Our Mission' tone='white'>
-        <p className='max-w-3xl text-lg text-ink'>{MISSION_STATEMENT}</p>
+      <Section id='mission' title={MISSION_TITLE} tone='white'>
+        <div className='max-w-3xl space-y-4 text-lg text-ink'>
+          {MISSION_PARAGRAPHS.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
       </Section>
 
       <Section id='approach' title='Our Approach'>
         <div className='max-w-3xl space-y-4 text-lg text-ink'>
           <p>{ORIGINAL_INTRO}</p>
           <p>
-            Today our programs span AI & technology, entrepreneurship, financial
-            literacy, mentorship, and youth development, so students build
-            academic, financial, and personal skills together.
+            Today our programs span entrepreneurship, financial literacy,
+            artificial intelligence & technology, and career & leadership
+            development, so students build financial, technical, and
+            professional skills together.
           </p>
         </div>
         <Link href='/programs' className={`${buttonClasses()} mt-6`}>

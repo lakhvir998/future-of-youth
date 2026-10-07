@@ -24,8 +24,8 @@ export function DonateCta() {
         </h2>
         <p className='text-ink'>
           Help us nurture the next generation of bright minds. Your gift keeps
-          our AI & technology, entrepreneurship, financial literacy, and
-          mentorship programs free for Detroit families.
+          our entrepreneurship, financial literacy, AI & technology, and career
+          & leadership programs free for Detroit families.
         </p>
         <p className='text-sm text-gray-700'>
           {NONPROFIT_STATEMENT} {TAX_DEDUCTIBLE_STATEMENT}

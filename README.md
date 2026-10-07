@@ -1,8 +1,8 @@
 # Future of the Youth
 
-Website for **Future of the Youth**, a Detroit 501(c)(3) nonprofit preparing
+Website for **Future of the Youth Limited**, a Detroit 501(c)(3) nonprofit preparing
 minority and underserved youth for the future through free AI & technology,
-entrepreneurship, financial literacy, mentorship, and youth development programs.
+entrepreneurship, financial literacy, AI & technology, and career & leadership development programs.
 
 Pages: Home, About, Programs (with a page per program), AI & Technology, Get Involved,
 Donate, Contact, and Privacy. Families can request program info, anyone can send a

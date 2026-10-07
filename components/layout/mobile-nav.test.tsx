@@ -68,7 +68,9 @@ describe('MobileNav', () => {
 
 describe('isCurrentPath', () => {
   it('matches nested program pages to Programs, but Home only exactly', () => {
-    expect(isCurrentPath('/programs/mentorship', '/programs')).toBe(true);
+    expect(isCurrentPath('/programs/career-leadership', '/programs')).toBe(
+      true
+    );
     expect(isCurrentPath('/programs', '/')).toBe(false);
     expect(isCurrentPath('/', '/')).toBe(true);
   });

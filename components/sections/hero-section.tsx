@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { RequestInfoForm } from '@/components/request-info-form/request-info-form';
 import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { HERO_HEADLINE, HERO_INTRO } from '@/lib/content/home';
+import { HERO_CTA_LABEL, HERO_HEADLINE, HERO_INTRO } from '@/lib/content/home';
 import { REQUEST_INFO_ID } from '@/lib/site';
 
 export function HeroSection() {
@@ -34,17 +34,22 @@ export function HeroSection() {
           {HERO_INTRO}
         </p>
         <div className='flex flex-wrap justify-center gap-4'>
-          <Link href='/programs' className={buttonClasses()}>
-            Explore our programs
+          {/* Written in normal case and capitalized with CSS, so screen readers
+              don't spell it out letter by letter. */}
+          <Link
+            href='/donate'
+            className={`${buttonClasses('accent')} px-10 py-4 text-xl tracking-wide uppercase`}
+          >
+            {HERO_CTA_LABEL}
           </Link>
-          <Link href='/donate' className={buttonClasses('secondary')}>
-            Donate
+          <Link href='/programs' className={buttonClasses('secondary')}>
+            Explore our programs
           </Link>
         </div>
         <Card
           id={REQUEST_INFO_ID}
           tabIndex={-1}
-          className='mt-8 max-w-md scroll-mt-8 focus:outline-hidden sm:p-6 md:p-8'
+          className='mt-8 max-w-md focus:outline-hidden sm:p-6 md:p-8'
         >
           <h2
             id='request-info-heading'

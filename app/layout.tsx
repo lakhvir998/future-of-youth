@@ -75,7 +75,10 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    // data-scroll-behavior tells Next.js to suspend the CSS smooth scrolling
+    // (globals.css) during route changes, so new pages start at the top instead
+    // of animating partway down.
+    <html lang='en' data-scroll-behavior='smooth'>
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >

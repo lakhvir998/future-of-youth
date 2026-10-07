@@ -39,7 +39,7 @@ export default function ProgramsPage() {
       />
 
       <section aria-label='Program list' className='px-4 py-12 md:py-16'>
-        <ul className='mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+        <ul className='mx-auto grid max-w-6xl gap-6 md:grid-cols-2'>
           {PROGRAMS.map((program) => (
             <li key={program.slug}>
               <ProgramCard program={program} headingLevel='h2' />

@@ -15,7 +15,7 @@ export function ProgramsOverview() {
       tone='white'
       intro={<p>{PROGRAMS_INTRO}</p>}
     >
-      <ul className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+      <ul className='grid gap-6 md:grid-cols-2'>
         {PROGRAMS.map((program) => (
           <li key={program.slug}>
             <ProgramCard program={program} />

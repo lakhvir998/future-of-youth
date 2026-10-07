@@ -40,7 +40,7 @@ export async function generateMetadata({
   const program = await getProgram(params);
   return buildMetadata({
     title: `${program.title} Program for Youth`,
-    description: program.summary,
+    description: program.metaDescription,
     path: program.href,
   });
 }

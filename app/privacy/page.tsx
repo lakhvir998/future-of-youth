@@ -72,8 +72,8 @@ export default function PrivacyPage() {
       <div className='mx-auto max-w-3xl space-y-10 px-4 py-12 text-lg text-ink md:py-16 [&_li]:ml-6 [&_ul]:list-disc [&_ul]:space-y-2'>
         <PolicySection id='who-we-are' title='Who We Are'>
           <p>
-            This website is operated by {name} (“Future of the Youth,” “we,”
-            “us”), a 501(c)(3) nonprofit organization based in Detroit,
+            This website is operated by {name} (“Future of the Youth Limited,”
+            “we,” “us”), a 501(c)(3) nonprofit organization based in Detroit,
             Michigan. This policy explains what information we collect through
             this website, how we use it, and the choices you have.
           </p>

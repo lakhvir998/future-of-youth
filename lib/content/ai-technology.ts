@@ -33,6 +33,8 @@ export const AI_TOPICS: AiTopic[] = [
       'Checking AI answers for accuracy and spotting misinformation',
       'Understanding bias and fairness in AI systems',
       'Protecting personal information when using AI tools',
+      'AI governance: how organizations and governments set rules for safe, fair AI',
+      'Understanding the risks associated with emerging technology',
     ],
   },
   {

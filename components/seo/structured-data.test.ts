@@ -50,7 +50,7 @@ describe('buildOrganizationNode', () => {
 
 describe('buildPageGraph', () => {
   it('adds breadcrumbs and extra nodes for subpages', () => {
-    const program = getProgramBySlug('mentorship')!;
+    const program = getProgramBySlug('career-leadership')!;
     const graph = buildPageGraph({
       path: program.href,
       name: program.title,

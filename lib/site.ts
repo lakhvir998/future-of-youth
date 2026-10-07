@@ -5,9 +5,9 @@ export const REQUEST_INFO_HREF = `/#${REQUEST_INFO_ID}`;
 export const MAIN_CONTENT_ID = 'main';
 
 export const SITE_NAME = 'Future of the Youth';
-export const SITE_TITLE = `${SITE_NAME} | Preparing Detroit Youth for the Future`;
+export const SITE_TITLE = `${SITE_NAME} | Preparing Today’s Youth for Tomorrow’s Economy`;
 export const SITE_DESCRIPTION =
-  'A Detroit 501(c)(3) nonprofit preparing minority and underserved youth for the future with free AI & technology, entrepreneurship, financial literacy, mentorship, and youth development programs.';
+  'A Detroit 501(c)(3) nonprofit preparing minority and underserved youth for the future with free entrepreneurship, financial literacy, AI & technology, and career & leadership development programs.';
 // Taken from the logo artwork.
 export const SITE_SLOGAN = 'Inspiring Minds, Shaping Futures';
 export const BRAND_COLOR = '#0072ce';

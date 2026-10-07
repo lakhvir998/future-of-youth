@@ -26,9 +26,9 @@ export const PAGES: Record<PagePath, PageInfo> = {
   '/': {
     path: '/',
     label: 'Home',
-    title: 'Preparing Detroit Youth for the Future',
+    title: 'Preparing Today’s Youth for Tomorrow’s Economy',
     description:
-      'Future of the Youth is a Detroit 501(c)(3) nonprofit offering free AI & technology education, entrepreneurship, financial literacy, mentorship, and youth development programs.',
+      'Future of the Youth Limited is a Detroit 501(c)(3) nonprofit offering free entrepreneurship, financial literacy, AI & technology, and career & leadership development programs.',
     inNav: true,
   },
   '/about': {
@@ -36,7 +36,7 @@ export const PAGES: Record<PagePath, PageInfo> = {
     label: 'About',
     title: 'About Us',
     description:
-      'Learn about Future of the Youth, a Detroit 501(c)(3) nonprofit preparing minority and underserved youth for the future.',
+      'Learn about Future of the Youth Limited, a Detroit 501(c)(3) nonprofit preparing minority and underserved youth for the future.',
     inNav: true,
   },
   '/programs': {
@@ -44,7 +44,7 @@ export const PAGES: Record<PagePath, PageInfo> = {
     label: 'Programs',
     title: 'Programs',
     description:
-      'Free programs for Detroit youth: AI & technology, entrepreneurship, financial literacy, mentorship, and youth development.',
+      'Free programs for Detroit youth: entrepreneurship, financial literacy, artificial intelligence & technology, and career & leadership development.',
     inNav: true,
   },
   '/ai-technology': {
@@ -68,7 +68,7 @@ export const PAGES: Record<PagePath, PageInfo> = {
     label: 'Donate',
     title: 'Donate',
     description:
-      'Support free AI & technology, entrepreneurship, financial literacy, and mentorship programs for Detroit youth. Future of the Youth is a 501(c)(3) nonprofit.',
+      'Support free entrepreneurship, financial literacy, AI & technology, and career & leadership programs for Detroit youth. Future of the Youth Limited is a 501(c)(3) nonprofit.',
     inNav: true,
   },
   '/contact': {

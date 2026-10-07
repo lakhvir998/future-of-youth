@@ -14,7 +14,7 @@ export const ORGANIZATION = {
 
 // Wording supplied by the client.
 export const NONPROFIT_STATEMENT =
-  'Future of the Youth is a 501(c)(3) nonprofit organization.';
+  'Future of the Youth Limited is a 501(c)(3) nonprofit organization.';
 
 export const TAX_DEDUCTIBLE_STATEMENT =
   'Donations are tax-deductible to the extent allowed by law.';

@@ -1,13 +1,16 @@
-// DRAFT: client to approve. Program descriptions are written from the
-// organization's existing site copy and the client's program list. They avoid
+// The four programs, in the client's order. Each `summary` is the client's exact
+// wording (from their "Our Programs" list). The remaining fields are
+// DRAFT: client to approve. They expand on the client's descriptions and avoid
 // specific numbers, schedules, partners, or locations the client hasn't
 // confirmed.
 
 export type Program = {
   slug: string;
   title: string;
-  /** One or two sentences for cards, meta descriptions, and structured data. */
+  /** Client wording. Used on cards and structured data. */
   summary: string;
+  /** DRAFT: search-result description, kept under ~160 characters. */
+  metaDescription: string;
   /** Where the program's full description lives. */
   href: string;
   intro: string[];
@@ -18,35 +21,12 @@ export type Program = {
 
 export const PROGRAMS: Program[] = [
   {
-    slug: 'ai-technology',
-    title: 'AI & Technology',
-    summary:
-      'Hands-on learning in artificial intelligence, responsible AI use, cybersecurity, and the digital skills students need for tomorrow’s careers.',
-    href: '/ai-technology',
-    intro: [
-      'Artificial intelligence and digital technology are reshaping how people learn, work, and build businesses. Our AI & Technology program makes sure Detroit youth are ready to take part in that future, not left behind by it.',
-      'Students learn what AI is and how it works, practice using AI tools responsibly, learn to protect themselves and others online, and explore the many career paths that technology opens up.',
-    ],
-    audience:
-      'Students who are curious about computers, AI, or technology careers, whether they are complete beginners or already enjoy building with technology.',
-    outcomes: [
-      'Understand what artificial intelligence is, what it can and cannot do, and how it is used in everyday life',
-      'Use AI tools responsibly, honestly, and safely for learning and creative work',
-      'Recognize online risks and practice core cybersecurity habits',
-      'Build practical digital skills for school and work',
-      'Explore technology career pathways and the steps to get there',
-    ],
-    approach: [
-      'Hands-on activities and projects rather than lectures',
-      'Lessons connected to entrepreneurship, so students see how technology helps people build businesses',
-      'Guidance from mentors who encourage questions and curiosity',
-    ],
-  },
-  {
     slug: 'entrepreneurship',
     title: 'Entrepreneurship',
     summary:
-      'Students learn how to turn ideas into businesses, from spotting opportunities to planning, pitching, and understanding how businesses are funded.',
+      'Youth learn the fundamentals of turning an idea into a business, including business planning, branding, marketing, business formation, customer acquisition, and understanding how businesses generate revenue.',
+    metaDescription:
+      'Free entrepreneurship program for youth: business planning, branding, marketing, business formation, finding customers, and how businesses make money.',
     href: '/programs/entrepreneurship',
     intro: [
       'Our entrepreneurship program gives young people a chance to learn how to start a business. Students learn to identify problems worth solving, turn ideas into plans, and understand what it takes to launch and grow a venture.',
@@ -55,11 +35,12 @@ export const PROGRAMS: Program[] = [
     audience:
       'Students with an idea, a side hustle, or simply an interest in how businesses work.',
     outcomes: [
-      'Identify opportunities and turn ideas into simple business plans',
-      'Understand customers, pricing, costs, and profit',
-      'Learn how businesses are funded and how investing works',
+      'Turn an idea into a simple business plan',
+      'Build a brand and market it to the right customers',
+      'Understand how a business is formed and set up',
+      'Find and keep customers',
+      'Learn how businesses generate revenue, manage costs, and earn a profit',
       'Practice presenting and pitching ideas with confidence',
-      'Build problem-solving, leadership, and teamwork skills',
     ],
     approach: [
       'Project-based learning where students develop their own ideas',
@@ -71,7 +52,9 @@ export const PROGRAMS: Program[] = [
     slug: 'financial-literacy',
     title: 'Financial Literacy',
     summary:
-      'Practical money skills, including budgeting, saving, and investing basics, that help students make informed decisions and build a secure future.',
+      'Participants learn practical money-management skills, including budgeting, saving, credit, banking, responsible borrowing, investing fundamentals, and building long-term financial stability.',
+    metaDescription:
+      'Free financial literacy program for youth: budgeting, saving, credit, banking, responsible borrowing, and investing fundamentals.',
     href: '/programs/financial-literacy',
     intro: [
       'We provide financial literacy education to equip students with the knowledge and tools they need to make informed decisions about money management, saving, and building a secure future.',
@@ -80,11 +63,12 @@ export const PROGRAMS: Program[] = [
     audience:
       'Students of all ages who want to understand money, from first allowances to planning for college and work.',
     outcomes: [
-      'Create and follow a simple budget',
-      'Understand saving, spending, and setting financial goals',
-      'Learn the basics of banking, credit, and avoiding debt traps',
-      'Get an introduction to investing, including how the stock market works',
-      'Make confident, informed decisions about money',
+      'Create and follow a budget',
+      'Build saving habits and set financial goals',
+      'Understand credit, credit scores, and how to use banking services',
+      'Borrow responsibly and avoid debt traps',
+      'Learn investing fundamentals, including how the stock market works',
+      'Plan for long-term financial stability',
     ],
     approach: [
       'Age-appropriate lessons using real-life examples',
@@ -93,51 +77,57 @@ export const PROGRAMS: Program[] = [
     ],
   },
   {
-    slug: 'mentorship',
-    title: 'Mentorship',
+    slug: 'ai-technology',
+    title: 'Artificial Intelligence & Technology',
     summary:
-      'Caring adult mentors who guide students, encourage them, and help them set and reach goals in school and life.',
-    href: '/programs/mentorship',
+      'Youth are introduced to artificial intelligence and learn how AI is changing education, careers, entrepreneurship, and business. Training will include practical AI applications, responsible AI use, AI security, governance, and understanding the risks associated with emerging technology.',
+    metaDescription:
+      'AI and technology education for youth: practical AI applications, responsible AI use, AI security, governance, and the risks of emerging technology.',
+    href: '/ai-technology',
     intro: [
-      'Mentorship is at the heart of everything we do. Our mentors encourage students, help them set goals, and support them through challenges in school and in life.',
-      'Every tutoring session, every shared meal, and every moment of encouragement helps create lasting change. Mentors help students build the confidence and resilience to keep going.',
+      'Artificial intelligence and digital technology are reshaping how people learn, work, and build businesses. Our AI & Technology program makes sure young people are ready to take part in that future, not left behind by it.',
+      'Students learn what AI is and how it works, practice using AI tools responsibly, learn to protect themselves and others online, and explore the many career paths that technology opens up.',
     ],
     audience:
-      'Any student in our programs who would benefit from encouragement, guidance, and a trusted adult in their corner.',
+      'Students who are curious about computers, AI, or technology careers, whether they are complete beginners or already enjoy building with technology.',
     outcomes: [
-      'Set personal, academic, and career goals and make a plan to reach them',
-      'Build confidence, resilience, and communication skills',
-      'Get guidance on school, college, and career decisions',
-      'Have a trusted adult to turn to for advice and encouragement',
+      'Understand how AI is changing education, careers, entrepreneurship, and business',
+      'Apply AI tools to practical, real-world tasks',
+      'Use AI responsibly, honestly, and safely',
+      'Recognize AI security risks and practice core cybersecurity habits',
+      'Understand AI governance and the risks of emerging technology',
     ],
     approach: [
-      'Mentors who encourage questions and celebrate progress',
-      'A safe, welcoming, and supportive environment',
-      'Mentorship woven into tutoring, workshops, and activities',
+      'Hands-on activities and projects rather than lectures',
+      'Lessons connected to entrepreneurship, so students see how technology helps people build businesses',
+      'Guidance from mentors who encourage questions and curiosity',
     ],
   },
   {
-    slug: 'youth-development',
-    title: 'Youth Development',
+    slug: 'career-leadership',
+    title: 'Career & Leadership Development',
     summary:
-      'Free tutoring, academic support, sports, community, and nutritious meals in a safe space where every student can focus and thrive.',
-    href: '/programs/youth-development',
+      'Participants develop communication, leadership, problem-solving, goal-setting, networking, and professional skills designed to prepare them for college, careers, entrepreneurship, and leadership opportunities.',
+    metaDescription:
+      'Free career and leadership program for youth: communication, leadership, problem-solving, goal-setting, networking, and professional skills.',
+    href: '/programs/career-leadership',
     intro: [
-      'By addressing educational gaps and providing personalized support, we aim to close the achievement divide and ensure that minority students in our community have the tools they need to thrive academically and beyond. Our program is not just about homework help—it’s about fostering resilience, promoting equity, and building brighter futures.',
-      'In addition to academic support, our program emphasizes the importance of life skills and overall well-being. Students engage in sports, build community, and develop essential life skills. To ensure every child can focus and thrive, we also serve free, nutritious lunches during all sessions.',
+      'Success in college, careers, and business depends on more than knowledge. Our Career & Leadership Development program helps young people build the communication, leadership, and professional skills that open doors.',
+      'Mentorship is woven throughout: mentors help students set goals, work through challenges, and see what is possible for their futures.',
     ],
     audience:
-      'Students in grades 2 through 12 who want extra academic support and a positive, supportive community.',
+      'Students preparing for college, their first job, starting a business, or taking on leadership roles in school and their community.',
     outcomes: [
-      'Strengthen skills in core subjects through tutoring and academic support',
-      'Build healthy habits, teamwork, and friendships through sports and activities',
-      'Develop essential life skills and confidence',
-      'Feel safe, supported, and part of a community',
+      'Communicate clearly and confidently, in person and in writing',
+      'Lead teams and solve problems together',
+      'Set goals and make a plan to reach them',
+      'Build a professional network and make a strong first impression',
+      'Develop professional skills for college applications, interviews, and the workplace',
     ],
     approach: [
-      'Personalized tutoring and skill-building workshops',
-      'Sports and community activities',
-      'Free, nutritious lunches during all sessions',
+      'Mentors who guide students and celebrate their progress',
+      'Practice through real-world activities, presentations, and teamwork',
+      'Connections to entrepreneurship and technology career pathways',
     ],
   },
 ];

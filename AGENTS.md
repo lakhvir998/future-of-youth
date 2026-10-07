@@ -228,7 +228,7 @@ Rules:
 - Copy marked `// DRAFT: client to approve` was written by us and still needs the
   client's sign-off. **Never invent facts**: no statistics, schedules, locations,
   partners, staff, or outcomes the client hasn't confirmed.
-- `NONPROFIT_STATEMENT` ("Future of the Youth is a 501(c)(3) nonprofit
+- `NONPROFIT_STATEMENT` ("Future of the Youth Limited is a 501(c)(3) nonprofit
   organization.") is the client's exact wording; show it on About, Donate, Contact, the
   donate CTA, and the footer.
 
@@ -363,10 +363,16 @@ browser audit below; keep them intact.
   `size-6`, and buttons and checkbox rows are `min-h-11`).
 - **Sticky header (2.4.11 Focus Not Obscured):** the header is `sticky` only when the
   viewport is at least 500px tall, so it doesn't eat the screen on landscape phones or
-  at 400% zoom. `html { scroll-padding-top: 6rem }` (same breakpoint, in
-  `globals.css`) keeps focused elements and anchor targets clear of it. If the header
-  gets taller, raise that value. Keep the header background opaque so its text
-  contrast doesn't depend on the content underneath.
+  at 400% zoom. At the same breakpoint, `globals.css` gives focusable elements and
+  `[id]` anchor targets `scroll-margin-top: 6rem`, so focus and in-page links land
+  below the header. If the header gets taller, raise that value. Keep the header
+  background opaque so its text contrast doesn't depend on the content underneath.
+  - **Don't use `scroll-padding-top` on `<html>`** for this. Next.js reads it on every
+    navigation; a value taller than the page's first element makes Next think the new
+    page's top is hidden and scroll it down (new pages opened partway down).
+  - **Keep `data-scroll-behavior='smooth'` on `<html>`** (`app/layout.tsx`). It's how
+    Next.js knows to suspend our CSS smooth scrolling during route changes; without
+    it, the reset to the top animates and Next scrolls again mid-animation.
 - **Reflow (1.4.10):** no horizontal scrolling at 320 px wide; button rows use
   `flex-wrap`.
 - **Names:** decorative glyphs (arrows, asterisks) are wrapped in

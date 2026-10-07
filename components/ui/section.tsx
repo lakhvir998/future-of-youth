@@ -28,7 +28,7 @@ export function Section({
       id={id}
       aria-labelledby={headingId}
       className={cn(
-        'scroll-mt-8 px-4 py-12 md:py-16',
+        'px-4 py-12 md:py-16',
         tone === 'white' ? 'bg-white' : 'bg-surface',
         className
       )}

@@ -10,6 +10,8 @@
   --color-accent: #ffd200;
   /* Text-safe gold: 5.85:1 on white (WCAG AA for all text sizes). */
   --color-accent-strong: #806000;
+  /* Hover for gold buttons; navy text on it stays above 7:1. */
+  --color-accent-hover: #f0c400;
   --color-surface: #f4f8fb;
 }
 
@@ -27,10 +29,13 @@ html {
 }
 
 /* Keep anchor targets and keyboard-focused elements clear of the sticky header
-   (WCAG 2.4.11 Focus Not Obscured). Matches the header's sticky breakpoint. */
+   (WCAG 2.4.11 Focus Not Obscured). Matches the header's sticky breakpoint.
+   This is scroll-margin on the targets, NOT scroll-padding on <html>: Next.js
+   reads html's scroll-padding on every navigation, and a value taller than the
+   header makes it think the new page's top is hidden and scroll it down. */
 @media (min-height: 500px) {
-  html {
-    scroll-padding-top: 6rem;
+  :where(a, button, input, select, textarea, summary, [tabindex], [id]) {
+    scroll-margin-top: 6rem;
   }
 }
 

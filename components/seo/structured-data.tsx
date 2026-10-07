@@ -1,9 +1,5 @@
 import { MISSION_STATEMENT } from '@/lib/content/home';
-import {
-  getContactInfo,
-  NONPROFIT_STATEMENT,
-  ORGANIZATION,
-} from '@/lib/content/organization';
+import { getContactInfo, ORGANIZATION } from '@/lib/content/organization';
 import type { Crumb } from '@/lib/content/pages';
 import { PROGRAMS, type Program } from '@/lib/content/programs';
 import {
@@ -50,7 +46,7 @@ export function buildOrganizationNode(): JsonLdNode {
     },
     image: absoluteUrl('/opengraph-image.png'),
     slogan: SITE_SLOGAN,
-    description: `${MISSION_STATEMENT} ${NONPROFIT_STATEMENT}`,
+    description: MISSION_STATEMENT,
     areaServed: {
       '@type': 'City',
       name: ORGANIZATION.city,

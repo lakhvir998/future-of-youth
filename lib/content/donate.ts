@@ -28,9 +28,9 @@ export const IMPACT_AREAS: ImpactArea[] = [
       'Lunches served during all sessions, so every child can focus and thrive.',
   },
   {
-    title: 'Mentorship & youth development',
+    title: 'Career & leadership development',
     description:
-      'Mentoring, sports, and community activities in a safe, supportive space.',
+      'Mentoring and hands-on practice in communication, leadership, and professional skills.',
   },
 ];
 

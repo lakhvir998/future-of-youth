@@ -46,6 +46,21 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '64kb',
     },
   },
+  // Programs consolidated into the client's four (October 2026).
+  async redirects() {
+    return [
+      {
+        source: '/programs/mentorship',
+        destination: '/programs/career-leadership',
+        permanent: true,
+      },
+      {
+        source: '/programs/youth-development',
+        destination: '/programs',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },

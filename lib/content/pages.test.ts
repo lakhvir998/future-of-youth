@@ -27,7 +27,7 @@ describe('page registry', () => {
     ];
     const descriptions = [
       ...pages.map((page) => page.description),
-      ...programs.map((program) => program.summary),
+      ...programs.map((program) => program.metaDescription),
     ];
 
     expect(new Set(titles).size).toBe(titles.length);
@@ -55,5 +55,42 @@ describe('programs', () => {
       expect(program.outcomes.length).toBeGreaterThanOrEqual(4);
       expect(program.approach.length).toBeGreaterThanOrEqual(3);
     }
+  });
+});
+
+describe("client's program list", () => {
+  it('has exactly the four programs, in order', () => {
+    expect(PROGRAMS.map((program) => program.title)).toEqual([
+      'Entrepreneurship',
+      'Financial Literacy',
+      'Artificial Intelligence & Technology',
+      'Career & Leadership Development',
+    ]);
+  });
+
+  it('keeps search descriptions short enough for result snippets', () => {
+    for (const program of PROGRAMS) {
+      expect(program.metaDescription.length).toBeLessThanOrEqual(160);
+    }
+  });
+
+  it('redirects the retired program pages', async () => {
+    const { default: nextConfig } = await import('@/next.config');
+    const redirects = await nextConfig.redirects!();
+
+    expect(redirects).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          source: '/programs/mentorship',
+          destination: '/programs/career-leadership',
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: '/programs/youth-development',
+          destination: '/programs',
+          permanent: true,
+        }),
+      ])
+    );
   });
 });

@@ -42,7 +42,7 @@ export default function GetInvolvedPage() {
             <li
               key={option.id}
               id={option.id}
-              className='flex scroll-mt-8 flex-col gap-4 rounded-2xl border-t-4 border-t-brand bg-white p-6 shadow-md'
+              className='flex flex-col gap-4 rounded-2xl border-t-4 border-t-brand bg-white p-6 shadow-md'
             >
               <h2 className='text-2xl font-bold text-navy'>{option.title}</h2>
               <p className='flex-1 text-lg text-ink'>{option.description}</p>

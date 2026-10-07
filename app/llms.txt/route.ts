@@ -34,7 +34,7 @@ ${NONPROFIT_STATEMENT}
 
 ${HERO_INTRO}
 
-## Mission Statement
+## Our Mission
 
 ${MISSION_STATEMENT}
 

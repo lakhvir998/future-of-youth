@@ -2,11 +2,13 @@ import type { ComponentProps, MouseEvent } from 'react';
 
 import { cn } from '@/lib/cn';
 
-type ButtonVariant = 'primary' | 'secondary';
+type ButtonVariant = 'primary' | 'secondary' | 'accent';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary: 'bg-brand text-white hover:bg-brand-hover',
   secondary: 'bg-gray-200 text-navy hover:bg-gray-300',
+  // Gold with navy text (~8:1): for the single most important call to action.
+  accent: 'bg-accent text-navy hover:bg-accent-hover',
 };
 
 /** Shared so links that look like buttons stay consistent with <Button>. */
