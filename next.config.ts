@@ -31,14 +31,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     formats: ['image/avif', 'image/webp'],
-    // Only the one hero photo, so /_next/image can't be used as an open proxy.
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        pathname: '/photo-1506744038136-46273834b3fb',
-      },
-    ],
+    // No remote images are used; an empty list keeps /_next/image from
+    // fetching any external URL (no open proxy).
+    remotePatterns: [],
   },
   experimental: {
     serverActions: {

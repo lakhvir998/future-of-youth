@@ -213,6 +213,21 @@ Rules:
 - Use named functions for handlers. Use early returns over nested conditionals.
 - Comments explain _why_, not _what_.
 
+## Homepage structure
+
+The homepage must let a corporation, foundation, financial institution, or donor
+understand within seconds who we are, what we do, who we serve, and why to support
+us, with the **four program areas** visible on arrival (client direction):
+Entrepreneurship | Financial Literacy | Artificial Intelligence & Technology | Career &
+Leadership Development.
+
+Order: Hero (501(c)(3) line, headline, intro, the four areas as linked badges,
+Support Our Mission, the request-info form) → At a Glance → Our Programs → Mission &
+Vision → feature videos → Building for Impact → donate prompt. The four areas get
+equal weight (same card and icon treatment); don't give one area its own extra
+homepage section. Icons come from `components/ui/program-icon.tsx`. "At a Glance"
+answers must quote existing site copy (a test enforces it).
+
 ## Content model
 
 - **All copy lives in `lib/content/`**, never inline in a page when it's reused:
@@ -228,6 +243,11 @@ Rules:
 - Copy marked `// DRAFT: client to approve` was written by us and still needs the
   client's sign-off. **Never invent facts**: no statistics, schedules, locations,
   partners, staff, or outcomes the client hasn't confirmed.
+- **Testimonials:** publish only statements from real participants, parents,
+  community partners, sponsors, or supporters who have given permission to use them
+  (client policy). The original template testimonial was removed; there is no
+  testimonial section until the client supplies approved ones. Never add sample,
+  placeholder, or invented quotes.
 - `NONPROFIT_STATEMENT` ("Future of the Youth Limited is a 501(c)(3) nonprofit
   organization.") is the client's exact wording; show it on About, Donate, Contact, the
   donate CTA, and the footer.
@@ -321,8 +341,9 @@ and the schemas in `lib/`. Keep them intact:
    The page is static, so the CSP uses `'unsafe-inline'` for scripts instead of nonces.
    If you add a third-party script, font, image host, or iframe, add it to the CSP
    explicitly, and verify in a browser that the console shows no CSP violations.
-8. **Image optimizer:** `images.remotePatterns` allow-lists the exact remote path, so
-   `/_next/image` can't be abused as an open proxy. Add new remote images one by one.
+8. **Image optimizer:** `images.remotePatterns` is empty (the site uses no remote
+   images), so `/_next/image` can't be abused as an open proxy. If a remote image is
+   ever needed, allow-list its exact path, not a whole host.
 9. **Server Actions** accept at most 64 KB of request body
    (`experimental.serverActions.bodySizeLimit`).
 10. **Supply chain:** CI runs `npm audit signatures` and fails on high-severity advisories
@@ -356,8 +377,9 @@ browser audit below; keep them intact.
   with a `ring-*`, never `outline-none` (it removes focus outlines in Windows
   forced-colors mode).
 - **Contrast (1.4.3, 1.4.11):** text ≥ 4.5:1 (≥ 3:1 for large text), and field borders
-  and other UI boundaries ≥ 3:1. `accent` (#ffd200) is decorative only; use
-  `accent-strong` for gold text. Use `gray-500` or darker for borders and `red-700` for
+  and other UI boundaries ≥ 3:1. On white, `accent` (#ffd200) is decorative only;
+  use `accent-strong` for gold text. On `navy` (the hero), `accent` text is fine
+  (about 8:1). Use `gray-500` or darker for borders and `red-700` for
   error text. Text over images needs a scrim (see the hero).
 - **Target size (2.5.8):** interactive targets are at least 24×24 px (checkboxes are
   `size-6`, and buttons and checkbox rows are `min-h-11`).

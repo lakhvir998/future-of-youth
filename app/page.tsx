@@ -1,11 +1,10 @@
-import { AiHighlight } from '@/components/sections/ai-highlight';
+import { AtAGlanceSection } from '@/components/sections/at-a-glance-section';
 import { DonateCta } from '@/components/sections/donate-cta';
 import { FeaturesSection } from '@/components/sections/features-section';
 import { HeroSection } from '@/components/sections/hero-section';
 import { ImpactSection } from '@/components/sections/impact-section';
 import { MissionVisionSection } from '@/components/sections/mission-vision-section';
 import { ProgramsOverview } from '@/components/sections/programs-overview';
-import { TestimonialSection } from '@/components/sections/testimonial-section';
 import { StructuredData } from '@/components/seo/structured-data';
 import { HERO_INTRO } from '@/lib/content/home';
 import { PROGRAMS } from '@/lib/content/programs';
@@ -29,11 +28,10 @@ export default function HomePage() {
         extra={PROGRAMS.map(buildProgramNode)}
       />
       <HeroSection />
+      <AtAGlanceSection />
       <ProgramsOverview />
-      <AiHighlight />
       <MissionVisionSection />
       <FeaturesSection />
-      <TestimonialSection />
       <ImpactSection />
       <DonateCta />
     </>

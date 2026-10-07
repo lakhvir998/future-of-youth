@@ -9,9 +9,8 @@ describe('page registry', () => {
   it('has the navigation the client asked for, in order', () => {
     expect(NAV_ITEMS.map((item) => item.label)).toEqual([
       'Home',
-      'About',
-      'Programs',
-      'AI & Technology',
+      'About Us',
+      'Our Programs',
       'Get Involved',
       'Donate',
       'Contact',

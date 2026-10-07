@@ -9,7 +9,8 @@ import { SITE_NAME, SITE_SLOGAN } from '@/lib/site';
 import { MobileNav } from './mobile-nav';
 import { NavLinks } from './nav-links';
 
-// Donate is its own prominent button; the rest are text links.
+// Donate is its own gold button, always visible in the header (desktop and
+// mobile), so it's left out of both menus.
 const LINK_ITEMS = NAV_ITEMS.filter((item) => item.path !== '/donate');
 
 export function SiteHeader() {
@@ -52,13 +53,13 @@ export function SiteHeader() {
           <Link
             href='/donate'
             className={cn(
-              buttonClasses(),
+              buttonClasses('accent'),
               'min-h-11 px-3 py-2 text-base sm:px-6'
             )}
           >
             Donate
           </Link>
-          <MobileNav items={NAV_ITEMS} />
+          <MobileNav items={LINK_ITEMS} />
         </div>
       </div>
     </header>

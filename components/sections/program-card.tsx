@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { ProgramIcon } from '@/components/ui/program-icon';
 import type { Program } from '@/lib/content/programs';
 
 type ProgramCardProps = {
@@ -15,7 +16,14 @@ export function ProgramCard({
 
   return (
     <article className='flex h-full flex-col gap-3 rounded-2xl border-t-4 border-t-brand bg-white p-6 shadow-md'>
-      <Heading className='text-xl font-bold text-navy'>{program.title}</Heading>
+      <div className='flex items-center gap-3'>
+        <span className='flex size-11 items-center justify-center rounded-xl bg-surface text-brand'>
+          <ProgramIcon slug={program.slug} />
+        </span>
+        <Heading className='text-xl font-bold text-navy'>
+          {program.title}
+        </Heading>
+      </div>
       <p className='flex-1 text-ink'>{program.summary}</p>
       <Link
         href={program.href}

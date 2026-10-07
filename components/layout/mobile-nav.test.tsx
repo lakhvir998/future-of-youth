@@ -48,7 +48,7 @@ describe('MobileNav', () => {
     render(<MobileNav items={NAV_ITEMS} />);
     await user.click(screen.getByRole('button', { name: 'Menu' }));
 
-    expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'About Us' })).toHaveAttribute(
       'aria-current',
       'page'
     );
@@ -73,5 +73,19 @@ describe('isCurrentPath', () => {
     );
     expect(isCurrentPath('/programs', '/')).toBe(false);
     expect(isCurrentPath('/', '/')).toBe(true);
+  });
+});
+
+describe('MobileNav items', () => {
+  it('lists the menu without Donate (it has its own header button)', async () => {
+    const { NAV_ITEMS: items } = await import('@/lib/content/pages');
+    const menu = items.filter((item) => item.path !== '/donate');
+    const user = userEvent.setup();
+    render(<MobileNav items={menu} />);
+    await user.click(screen.getByRole('button', { name: 'Menu' }));
+
+    expect(screen.getAllByRole('link').map((link) => link.textContent)).toEqual(
+      ['Home', 'About Us', 'Our Programs', 'Get Involved', 'Contact']
+    );
   });
 });

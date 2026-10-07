@@ -12,3 +12,28 @@ describe('Building for Impact copy', () => {
     }
   });
 });
+
+describe('At a Glance', () => {
+  // Every answer must quote copy that already appears on the site, so this
+  // summary can never introduce a new or unapproved claim.
+  it('only quotes existing site copy', async () => {
+    const { GLANCE_ITEMS, MISSION_PARAGRAPHS } = await import('./home');
+    const { WHO_WE_SERVE } = await import('./about');
+    const { DONATE_PARAGRAPHS } = await import('./donate');
+    const sources = [...MISSION_PARAGRAPHS, WHO_WE_SERVE, ...DONATE_PARAGRAPHS];
+
+    for (const { answer } of GLANCE_ITEMS) {
+      expect(sources.some((source) => source.includes(answer))).toBe(true);
+    }
+  });
+
+  it('answers the four questions funders ask first', async () => {
+    const { GLANCE_ITEMS } = await import('./home');
+    expect(GLANCE_ITEMS.map((item) => item.question)).toEqual([
+      'Who we are',
+      'What we do',
+      'Who we serve',
+      'Why support us',
+    ]);
+  });
+});

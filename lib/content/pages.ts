@@ -18,7 +18,7 @@ export type PageInfo = {
   /** <title> (the root layout appends the site name). */
   title: string;
   description: string;
-  /** Shown in the main navigation, in this order. */
+  /** Shown in the main menu, in this order (the client's list). */
   inNav: boolean;
 };
 
@@ -33,7 +33,7 @@ export const PAGES: Record<PagePath, PageInfo> = {
   },
   '/about': {
     path: '/about',
-    label: 'About',
+    label: 'About Us',
     title: 'About Us',
     description:
       'Learn about Future of the Youth Limited, a Detroit 501(c)(3) nonprofit preparing minority and underserved youth for the future.',
@@ -41,7 +41,7 @@ export const PAGES: Record<PagePath, PageInfo> = {
   },
   '/programs': {
     path: '/programs',
-    label: 'Programs',
+    label: 'Our Programs',
     title: 'Programs',
     description:
       'Free programs for Detroit youth: entrepreneurship, financial literacy, artificial intelligence & technology, and career & leadership development.',
@@ -53,7 +53,8 @@ export const PAGES: Record<PagePath, PageInfo> = {
     title: 'AI & Technology Education for Youth',
     description:
       'AI education, responsible AI use, AI security and cybersecurity, digital skills, and technology career pathways for Detroit youth.',
-    inNav: true,
+    // Reached via Our Programs and the footer; not in the main menu (client's list).
+    inNav: false,
   },
   '/get-involved': {
     path: '/get-involved',
@@ -90,6 +91,9 @@ export const PAGES: Record<PagePath, PageInfo> = {
 };
 
 export const NAV_ITEMS = Object.values(PAGES).filter((page) => page.inNav);
+
+/** Every page, for the footer: the main menu plus AI & Technology and Privacy. */
+export const ALL_PAGES = Object.values(PAGES);
 
 export type Crumb = { label: string; href: string };
 

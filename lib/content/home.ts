@@ -33,6 +33,48 @@ export const VISION_PARAGRAPHS = [
   'Our long-term vision is to expand Future of the Youth programming into communities across the country and create pathways for thousands of young people to become entrepreneurs, technology leaders, professionals, and financially empowered adults.',
 ] as const;
 
+// "At a Glance": answers the four questions a funder asks first. Every answer
+// quotes copy that already appears elsewhere on the site (a test enforces it),
+// so this section never introduces new claims.
+export type GlanceItem = {
+  question: string;
+  answer: string;
+  link: { label: string; href: string };
+};
+
+export const GLANCE_TITLE = 'At a Glance';
+
+export const GLANCE_ITEMS: GlanceItem[] = [
+  {
+    question: 'Who we are',
+    // From the mission (client wording).
+    answer:
+      'Future of the Youth is a 501(c)(3) nonprofit organization committed to preparing young people for economic opportunity and the future of work.',
+    link: { label: 'About us', href: '/about' },
+  },
+  {
+    question: 'What we do',
+    // From the mission (client wording).
+    answer:
+      'We provide practical education in entrepreneurship, financial literacy, artificial intelligence, technology, and career readiness.',
+    link: { label: 'Our programs', href: '/programs' },
+  },
+  {
+    question: 'Who we serve',
+    // From the About page's "Who We Serve" (DRAFT: client to approve).
+    answer:
+      'We serve students in grades 2 through 12 from minority and underserved communities in Detroit.',
+    link: { label: 'Who we serve', href: '/about#who-we-serve' },
+  },
+  {
+    question: 'Why support us',
+    // From the donation messaging (client wording).
+    answer:
+      'Your support helps Future of the Youth provide young people with access to entrepreneurship education, financial literacy, artificial intelligence training, technology, mentorship, and career-development opportunities.',
+    link: { label: 'Ways to give', href: '/donate' },
+  },
+];
+
 // Impact: the client's exact wording. Per the client, this section describes
 // goals and growth plans only. Never add statistics or results here that the
 // organization hasn't achieved and confirmed.

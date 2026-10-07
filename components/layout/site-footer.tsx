@@ -7,7 +7,7 @@ import {
   ORGANIZATION,
   phoneHref,
 } from '@/lib/content/organization';
-import { NAV_ITEMS, PAGES } from '@/lib/content/pages';
+import { ALL_PAGES } from '@/lib/content/pages';
 import { SITE_SLOGAN } from '@/lib/site';
 
 const linkClasses =
@@ -32,7 +32,7 @@ export function SiteFooter() {
         <nav aria-label='Footer'>
           <h2 className='mb-3 font-semibold text-white'>Explore</h2>
           <ul className='grid grid-cols-2 gap-x-6 gap-y-2'>
-            {[...NAV_ITEMS, PAGES['/privacy']].map((item) => (
+            {ALL_PAGES.map((item) => (
               <li key={item.path}>
                 <Link href={item.path} className={linkClasses}>
                   {item.label}

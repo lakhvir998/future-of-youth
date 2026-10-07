@@ -1,39 +1,65 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { RequestInfoForm } from '@/components/request-info-form/request-info-form';
 import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { ProgramIcon } from '@/components/ui/program-icon';
 import { HERO_CTA_LABEL, HERO_HEADLINE, HERO_INTRO } from '@/lib/content/home';
+import { PROGRAMS } from '@/lib/content/programs';
 import { REQUEST_INFO_ID } from '@/lib/site';
 
 export function HeroSection() {
   return (
     <section
       aria-labelledby='hero-heading'
-      className='relative flex min-h-[60vh] w-full flex-col items-center justify-center bg-surface px-4 py-8 md:py-12'
+      className='relative isolate overflow-hidden bg-navy px-4 py-12 md:py-16'
     >
-      <Image
-        src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=1200&h=400&facepad=3'
-        alt=''
-        fill
-        preload
-        sizes='100vw'
-        className='object-cover opacity-60'
+      {/* Decorative brand glows (no stock photography). */}
+      <div
+        aria-hidden='true'
+        className='absolute -top-32 -right-32 -z-10 size-96 rounded-full bg-brand opacity-30 blur-3xl'
       />
-      {/* Scrim: guarantees text contrast no matter what the photo shows (WCAG 1.4.3). */}
-      <div aria-hidden='true' className='absolute inset-0 bg-white/50' />
-      <div className='relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-6 text-center'>
+      <div
+        aria-hidden='true'
+        className='absolute -bottom-40 -left-32 -z-10 size-112 rounded-full bg-brand opacity-40 blur-3xl'
+      />
+
+      <div className='mx-auto flex max-w-4xl flex-col items-center gap-6 text-center'>
+        <p className='text-sm font-semibold tracking-widest text-accent uppercase'>
+          501(c)(3) nonprofit organization
+        </p>
         <h1
           id='hero-heading'
-          className='text-3xl leading-tight font-bold text-navy drop-shadow-lg sm:text-4xl md:text-5xl'
+          className='text-3xl leading-tight font-bold text-white sm:text-4xl md:text-5xl'
         >
           {HERO_HEADLINE}
         </h1>
-        <p className='px-1 text-base font-medium text-ink sm:px-4 sm:text-lg md:text-xl'>
+        <p className='max-w-3xl text-base text-blue-50 sm:text-lg md:text-xl'>
           {HERO_INTRO}
         </p>
-        <div className='flex flex-wrap justify-center gap-4'>
+
+        {/* The four program areas, visible on arrival (client direction). */}
+        <ul
+          aria-label='Our program areas'
+          className='flex flex-wrap justify-center gap-3'
+        >
+          {PROGRAMS.map((program) => (
+            <li key={program.slug}>
+              <Link
+                href={program.href}
+                className='inline-flex min-h-11 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-4 py-2 font-semibold text-white transition hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-hidden'
+              >
+                <ProgramIcon
+                  slug={program.slug}
+                  className='size-5 text-accent'
+                />
+                {program.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className='mt-2 flex flex-wrap justify-center gap-4'>
           {/* Written in normal case and capitalized with CSS, so screen readers
               don't spell it out letter by letter. */}
           <Link
@@ -46,6 +72,7 @@ export function HeroSection() {
             Explore our programs
           </Link>
         </div>
+
         <Card
           id={REQUEST_INFO_ID}
           tabIndex={-1}

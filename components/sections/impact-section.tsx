@@ -16,7 +16,7 @@ export function ImpactSection() {
     <section
       id='building-for-impact'
       aria-labelledby='building-for-impact-heading'
-      className='bg-white px-4 py-12 md:py-16'
+      className='border-t border-gray-200 bg-white px-4 py-12 md:py-16'
     >
       <div className='mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-5'>
         <div className='lg:col-span-3'>
