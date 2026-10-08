@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { GoogleTag } from '@/components/analytics/google-tag';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
+import { ServiceWorkerRegistration } from '@/components/pwa/service-worker-registration';
 import {
   BRAND_COLOR,
   getSiteUrl,
@@ -34,6 +35,12 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  // iOS home-screen app (Safari "Add to Home Screen").
+  appleWebApp: {
+    capable: true,
+    title: SITE_NAME,
+    statusBarStyle: 'default',
+  },
   category: 'education',
   creator: SITE_NAME,
   publisher: SITE_NAME,
@@ -99,6 +106,7 @@ export default function RootLayout({
         </main>
         <SiteFooter />
         <GoogleTag />
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );

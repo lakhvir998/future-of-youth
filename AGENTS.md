@@ -70,6 +70,8 @@ app/
   globals.css                     Tailwind import + @theme brand tokens
   favicon.ico, icon.png, apple-icon.png, opengraph-image.png, twitter-image.png
   robots.ts, sitemap.ts, manifest.ts, llms.txt/route.ts   SEO / AEO metadata routes
+  sw.js/route.ts                  Service worker (PWA), versioned per deploy
+  offline/                        Offline fallback page (noindex, not in sitemap)
   actions/
     submit-request-info.ts        'use server' → handleFormSubmission
     submit-contact.ts             'use server' → handleFormSubmission
@@ -81,6 +83,7 @@ components/
   contact-form/                   Contact form (client) + ?topic= preselect wrapper
   donate/paypal-button.tsx        Outbound PayPal link that records a donate_click
   analytics/google-tag.tsx        Loads gtag.js only when IDs are configured
+  pwa/service-worker-registration.tsx   Registers /sw.js in production builds only
   seo/structured-data.tsx         JSON-LD @graph builders with safe serialization
   ui/                             Button, Card, Section, TextField, TextArea, SelectField, CheckboxGroup, CheckList
 lib/
@@ -95,6 +98,7 @@ lib/
   analytics-config.ts             Google tag IDs (validated) + CSP hosts; safe to import from next.config
   analytics.ts                    trackEvent() with a fixed, PII-free event schema
   csp.ts                          buildContentSecurityPolicy()
+  pwa/service-worker.ts           Service worker source, version, precache list
   seo.ts                          buildMetadata / buildPageMetadata
   site.ts                         Site name/description, getSiteUrl(), getPaypalUrl(), anchor ids
   cn.ts                           className joiner
@@ -293,6 +297,34 @@ Nonprofit501c3`, and contact details when set), the WebSite, the WebPage, a
   `sm` up; below that they're screen-reader only, to avoid horizontal scrolling at
   320px.
 - Update the share-image alt text (`app/*-image.alt.txt`) whenever the logo changes.
+
+## Progressive Web App
+
+The site installs as an app (Android, desktop Chrome/Edge, and iOS via "Add to Home
+Screen") and works offline for pages a visitor has already opened.
+
+- **Manifest** (`app/manifest.ts`): stable `id: '/'`, standalone display, the
+  logo-generated icons (192, 512, maskable), and shortcuts (Programs, Request Info,
+  Donate, Contact). iOS settings are in `appleWebApp` in `app/layout.tsx`.
+- **Service worker** (`lib/pwa/service-worker.ts`, served at `/sw.js` by
+  `app/sw.js/route.ts`): network-first for pages and RSC payloads, falling back to the
+  cache and then `/offline`; cache-first for `/_next/static`; stale-while-revalidate
+  for images. It handles **only same-origin GET** requests, so it never touches
+  Server Actions (form POSTs), PayPal, Google, or the Vercel toolbar, and it skips
+  videos and range requests. Runtime caches are capped at 60 entries each.
+- **Vercel:** the worker version is `VERCEL_DEPLOYMENT_ID` (falling back to the
+  commit SHA, then the build time), so each deploy installs a fresh worker and deletes
+  the old deploy's caches. `next.config.ts` serves `/sw.js` with
+  `Cache-Control: no-cache, no-store` so neither browsers nor Vercel's CDN hold on to
+  an old worker. Pages are network-first, so online visitors always get the current
+  deployment (and its current Server Action IDs).
+- Registration (`components/pwa/service-worker-registration.tsx`) runs **only in
+  production builds**, never in `npm run dev`.
+- **Testing offline:** Chrome's "Offline" network emulation does not apply to the
+  service worker, so it gives misleading results. Stop the server instead (or use
+  DevTools → Application → Service workers → Offline).
+- The worker's source is a template string: **double every backslash** in it (a test
+  compiles the output and fails on invalid JavaScript).
 
 ## Analytics (Google tag)
 

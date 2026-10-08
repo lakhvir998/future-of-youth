@@ -57,7 +57,21 @@ const nextConfig: NextConfig = {
     ];
   },
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }];
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      {
+        // Browsers and Vercel's CDN must always re-check the service worker,
+        // or a new deploy's worker (and its cache cleanup) never arrives.
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
+    ];
   },
 };
 

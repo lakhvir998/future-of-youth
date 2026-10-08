@@ -32,18 +32,19 @@ Without valid SMTP settings the page still renders, but form submissions show a
 
 ## Scripts
 
-| Command               | What it does                                                    |
-| --------------------- | --------------------------------------------------------------- |
-| `npm run dev`         | Start the dev server                                            |
-| `npm run build`       | Production build                                                |
-| `npm run start`       | Serve the production build                                      |
-| `npm run typecheck`   | Type-check with `tsc`                                           |
-| `npm run lint`        | Lint with ESLint (`lint:fix` to auto-fix)                       |
-| `npm run format`      | Format with Prettier (`format:check` to verify only)            |
-| `npm test`            | Run unit and component tests (`test:watch` for watch mode)      |
-| `npm run brand:build` | Rebuild all logo/icon PNGs and the share image from `brand/`    |
-| `npm run check:links` | After a build: crawl the site and fail on broken links          |
-| `npm run check`       | Everything CI runs: typecheck, lint, format, test, build, links |
+| Command               | What it does                                                         |
+| --------------------- | -------------------------------------------------------------------- |
+| `npm run dev`         | Start the dev server                                                 |
+| `npm run build`       | Production build                                                     |
+| `npm run start`       | Serve the production build                                           |
+| `npm run typecheck`   | Type-check with `tsc`                                                |
+| `npm run lint`        | Lint with ESLint (`lint:fix` to auto-fix)                            |
+| `npm run format`      | Format with Prettier (`format:check` to verify only)                 |
+| `npm test`            | Run unit and component tests (`test:watch` for watch mode)           |
+| _(PWA)_               | Installable and offline-capable; see AGENTS.md "Progressive Web App" |
+| `npm run brand:build` | Rebuild all logo/icon PNGs and the share image from `brand/`         |
+| `npm run check:links` | After a build: crawl the site and fail on broken links               |
+| `npm run check`       | Everything CI runs: typecheck, lint, format, test, build, links      |
 
 ## Environment variables
 
