@@ -1,4 +1,5 @@
 import { AtAGlanceSection } from '@/components/sections/at-a-glance-section';
+import { CommunityImpactSection } from '@/components/sections/community-impact-section';
 import { DonateCta } from '@/components/sections/donate-cta';
 import { FeaturesSection } from '@/components/sections/features-section';
 import { HeroSection } from '@/components/sections/hero-section';
@@ -32,6 +33,7 @@ export default function HomePage() {
       <ProgramsOverview />
       <MissionVisionSection />
       <FeaturesSection />
+      <CommunityImpactSection />
       <ImpactSection />
       <DonateCta />
     </>

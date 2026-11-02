@@ -102,7 +102,7 @@ export default function PrivacyPage() {
             technologies. We do not send form contents to these services.
           </p>
           <p>
-            Donations are processed by PayPal on PayPal’s own website. We do not
+            Donations are processed by Zeffy on Zeffy’s own website. We do not
             receive or store your payment card details.
           </p>
         </PolicySection>
@@ -139,8 +139,8 @@ export default function PrivacyPage() {
             We do not sell or rent your personal information. We share it only
             with service providers that help us run this website and respond to
             you, such as our website host, email provider, Google (analytics and
-            advertising measurement), and PayPal (donations), or when required
-            by law.
+            advertising measurement), and Zeffy (donations), or when required by
+            law.
           </p>
         </PolicySection>
 

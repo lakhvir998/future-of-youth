@@ -5,7 +5,7 @@
 // installs a fresh worker and deletes the previous deploy's caches.
 //
 // Caching rules:
-// - Only same-origin GET requests are handled. Server Actions (POST), PayPal,
+// - Only same-origin GET requests are handled. Server Actions (POST), Zeffy,
 //   Google, and the Vercel toolbar are never touched.
 // - Pages and RSC payloads: network first (always the current deploy when
 //   online), cached copy when offline, then the offline page.

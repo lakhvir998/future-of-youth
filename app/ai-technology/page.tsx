@@ -8,6 +8,7 @@ import {
   StructuredData,
 } from '@/components/seo/structured-data';
 import { buttonClasses } from '@/components/ui/button';
+import { ProgramStatusBadges } from '@/components/ui/program-status';
 import { CheckList } from '@/components/ui/check-list';
 import { Section } from '@/components/ui/section';
 import { AI_TECH_INTRO, AI_TOPICS } from '@/lib/content/ai-technology';
@@ -36,6 +37,7 @@ export default function AiTechnologyPage() {
       />
       <PageHero
         title='AI & Technology'
+        meta={<ProgramStatusBadges status={AI_PROGRAM.status} />}
         intro={<p>{AI_TECH_INTRO}</p>}
         breadcrumbs={breadcrumbs}
       >

@@ -12,18 +12,9 @@ export function HeroSection() {
   return (
     <section
       aria-labelledby='hero-heading'
-      className='relative isolate overflow-hidden bg-navy px-4 py-12 md:py-16'
+      // hero-glow: brand radial gradients (no stock photo, no costly blur filters).
+      className='hero-glow relative isolate overflow-hidden bg-navy px-4 py-12 md:py-16'
     >
-      {/* Decorative brand glows (no stock photography). */}
-      <div
-        aria-hidden='true'
-        className='absolute -top-32 -right-32 -z-10 size-96 rounded-full bg-brand opacity-30 blur-3xl'
-      />
-      <div
-        aria-hidden='true'
-        className='absolute -bottom-40 -left-32 -z-10 size-112 rounded-full bg-brand opacity-40 blur-3xl'
-      />
-
       <div className='mx-auto flex max-w-4xl flex-col items-center gap-6 text-center'>
         <p className='text-sm font-semibold tracking-widest text-accent uppercase'>
           501(c)(3) nonprofit organization

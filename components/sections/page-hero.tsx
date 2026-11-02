@@ -4,6 +4,8 @@ import { Breadcrumbs, type Crumb } from '@/components/layout/breadcrumbs';
 
 type PageHeroProps = {
   title: string;
+  /** Optional row under the title (e.g. program status badges). */
+  meta?: ReactNode;
   intro: ReactNode;
   breadcrumbs: Crumb[];
   children?: ReactNode;
@@ -12,6 +14,7 @@ type PageHeroProps = {
 /** Top of every subpage: breadcrumbs, the page's single <h1>, and an intro. */
 export function PageHero({
   title,
+  meta,
   intro,
   breadcrumbs,
   children,
@@ -23,6 +26,7 @@ export function PageHero({
         <h1 className='mt-4 text-3xl leading-tight font-bold text-navy sm:text-4xl md:text-5xl'>
           {title}
         </h1>
+        {meta && <div className='mt-4'>{meta}</div>}
         <div className='mt-4 max-w-3xl text-base text-ink sm:text-lg md:text-xl'>
           {intro}
         </div>

@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+// Zod 4 probes for `eval` (new Function) to speed up parsing. The site's CSP
+// blocks eval, so the probe shows up as a CSP violation in Chrome and costs
+// Lighthouse "Best practices" points. Every form schema imports this module, so
+// this applies before any schema runs, on the client and the server.
+z.config({ jitless: true });
+
 export const NAME_MAX_LENGTH = 100;
 export const MESSAGE_MAX_LENGTH = 2000;
 

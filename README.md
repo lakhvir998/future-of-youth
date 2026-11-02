@@ -6,7 +6,7 @@ entrepreneurship, financial literacy, AI & technology, and career & leadership d
 
 Pages: Home, About, Programs (with a page per program), AI & Technology, Get Involved,
 Donate, Contact, and Privacy. Families can request program info, anyone can send a
-contact message (both emailed to staff over SMTP), and donors give through PayPal.
+contact message (both emailed to staff over SMTP), and donors give through Zeffy.
 
 ## Tech stack
 

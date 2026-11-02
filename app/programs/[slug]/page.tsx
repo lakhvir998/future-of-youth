@@ -10,6 +10,7 @@ import {
   StructuredData,
 } from '@/components/seo/structured-data';
 import { buttonClasses } from '@/components/ui/button';
+import { ProgramStatusBadges } from '@/components/ui/program-status';
 import { breadcrumbsFor } from '@/lib/content/pages';
 import {
   getProgramBySlug,
@@ -63,6 +64,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
       />
       <PageHero
         title={program.title}
+        meta={<ProgramStatusBadges status={program.status} />}
         intro={
           <div className='space-y-4'>
             {program.intro.map((paragraph) => (

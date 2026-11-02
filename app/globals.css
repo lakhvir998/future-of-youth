@@ -39,6 +39,14 @@ html {
   }
 }
 
+/* Hero background: brand-blue glows as gradients. A blur() filter looked the
+   same but cost ~500ms of main-thread paint on mid-range phones. */
+.hero-glow {
+  background-image:
+    radial-gradient(circle at 90% 0%, rgb(0 114 206 / 0.45), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgb(0 114 206 / 0.55), transparent 45%);
+}
+
 body {
   background: #ffffff;
   color: var(--color-ink);

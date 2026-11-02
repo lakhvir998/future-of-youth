@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getPaypalUrl, getSiteUrl } from './site';
+import { getDonationUrl, getSiteUrl } from './site';
 
 describe('getSiteUrl', () => {
   afterEach(() => {
@@ -24,21 +24,50 @@ describe('getSiteUrl', () => {
   });
 });
 
-describe('getPaypalUrl', () => {
+describe('getDonationUrl', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
   });
 
-  it('returns https URLs', () => {
-    vi.stubEnv('NEXT_PUBLIC_PAYPAL_URL', 'https://www.paypal.com/donate/?x=1');
-    expect(getPaypalUrl()).toBe('https://www.paypal.com/donate/?x=1');
+  it('returns https Zeffy URLs', () => {
+    vi.stubEnv(
+      'NEXT_PUBLIC_DONATION_URL',
+      'https://www.zeffy.com/en-US/donation-form/abc'
+    );
+    expect(getDonationUrl()).toBe(
+      'https://www.zeffy.com/en-US/donation-form/abc'
+    );
   });
 
-  it.each(['javascript:alert(1)', 'http://paypal.com', 'not a url', ''])(
-    'rejects %j',
-    (value) => {
-      vi.stubEnv('NEXT_PUBLIC_PAYPAL_URL', value);
-      expect(getPaypalUrl()).toBeUndefined();
-    }
-  );
+  it.each([
+    'javascript:alert(1)',
+    'http://www.zeffy.com/en-US/donation-form/abc',
+    'https://www.paypal.com/donate/?hosted_button_id=1',
+    'https://zeffy.com.evil.example/donate',
+    'not a url',
+    '',
+  ])('rejects %j', (value) => {
+    vi.stubEnv('NEXT_PUBLIC_DONATION_URL', value);
+    expect(getDonationUrl()).toBeUndefined();
+  });
+
+  it('accepts the legacy setting only when it holds a Zeffy URL', () => {
+    vi.stubEnv('NEXT_PUBLIC_DONATION_URL', '');
+    vi.stubEnv(
+      'NEXT_PUBLIC_PAYPAL_URL',
+      'https://www.zeffy.com/en-US/donation-form/future-of-the-youth'
+    );
+    expect(getDonationUrl()).toBe(
+      'https://www.zeffy.com/en-US/donation-form/future-of-the-youth'
+    );
+
+    vi.stubEnv('NEXT_PUBLIC_PAYPAL_URL', 'https://www.paypal.com/donate/?x=1');
+    expect(getDonationUrl()).toBeUndefined();
+  });
+
+  it('prefers NEXT_PUBLIC_DONATION_URL over the legacy setting', () => {
+    vi.stubEnv('NEXT_PUBLIC_DONATION_URL', 'https://www.zeffy.com/new');
+    vi.stubEnv('NEXT_PUBLIC_PAYPAL_URL', 'https://www.zeffy.com/old');
+    expect(getDonationUrl()).toBe('https://www.zeffy.com/new');
+  });
 });

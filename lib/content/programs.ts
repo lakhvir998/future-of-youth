@@ -4,9 +4,25 @@
 // specific numbers, schedules, partners, or locations the client hasn't
 // confirmed.
 
+/**
+ * Whether a program is running today or part of planned expansion. The site
+ * must never present a planned program as operating (Ad Grants review).
+ * Confirmed by the client on 2026-11-02: all four programs are operating.
+ */
+export type ProgramStatus = 'operating' | 'planned';
+
+export const PROGRAM_STATUS_LABEL: Record<ProgramStatus, string> = {
+  operating: 'Operating now',
+  planned: 'Planned expansion',
+};
+
+/** Ages served, confirmed by the client on 2026-11-02. */
+export const PROGRAM_AGES = 'Grades 2–12';
+
 export type Program = {
   slug: string;
   title: string;
+  status: ProgramStatus;
   /** Client wording. Used on cards and structured data. */
   summary: string;
   /** DRAFT: search-result description, kept under ~160 characters. */
@@ -23,6 +39,7 @@ export const PROGRAMS: Program[] = [
   {
     slug: 'entrepreneurship',
     title: 'Entrepreneurship',
+    status: 'operating',
     summary:
       'Youth learn the fundamentals of turning an idea into a business, including business planning, branding, marketing, business formation, customer acquisition, and understanding how businesses generate revenue.',
     metaDescription:
@@ -51,6 +68,7 @@ export const PROGRAMS: Program[] = [
   {
     slug: 'financial-literacy',
     title: 'Financial Literacy',
+    status: 'operating',
     summary:
       'Participants learn practical money-management skills, including budgeting, saving, credit, banking, responsible borrowing, investing fundamentals, and building long-term financial stability.',
     metaDescription:
@@ -79,6 +97,7 @@ export const PROGRAMS: Program[] = [
   {
     slug: 'ai-technology',
     title: 'Artificial Intelligence & Technology',
+    status: 'operating',
     summary:
       'Youth are introduced to artificial intelligence and learn how AI is changing education, careers, entrepreneurship, and business. Training will include practical AI applications, responsible AI use, AI security, governance, and understanding the risks associated with emerging technology.',
     metaDescription:
@@ -106,6 +125,7 @@ export const PROGRAMS: Program[] = [
   {
     slug: 'career-leadership',
     title: 'Career & Leadership Development',
+    status: 'operating',
     summary:
       'Participants develop communication, leadership, problem-solving, goal-setting, networking, and professional skills designed to prepare them for college, careers, entrepreneurship, and leadership opportunities.',
     metaDescription:

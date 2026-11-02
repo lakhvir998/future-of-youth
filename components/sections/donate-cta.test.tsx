@@ -26,25 +26,25 @@ describe('DonateCta', () => {
     ).toBeInTheDocument();
   });
 
-  it('links Donate Now to the official PayPal donation page', () => {
+  it('links Donate Now to the official Zeffy donation page', () => {
     vi.stubEnv(
-      'NEXT_PUBLIC_PAYPAL_URL',
-      'https://www.paypal.com/donate/?hosted_button_id=TEST'
+      'NEXT_PUBLIC_DONATION_URL',
+      'https://www.zeffy.com/en-US/donation-form/test'
     );
     render(<DonateCta />);
 
     const button = screen.getByRole('link', { name: /donate now/i });
     expect(button).toHaveAttribute(
       'href',
-      'https://www.paypal.com/donate/?hosted_button_id=TEST'
+      'https://www.zeffy.com/en-US/donation-form/test'
     );
     expect(button).toHaveAttribute('target', '_blank');
     expect(button).toHaveAccessibleName(
-      'Donate Now (opens PayPal in a new tab)'
+      'Donate Now (opens Zeffy in a new tab)'
     );
   });
 
-  it('falls back to the donate page until PayPal is configured', () => {
+  it('falls back to the donate page until Zeffy is configured', () => {
     render(<DonateCta />);
 
     expect(screen.getByRole('link', { name: 'Donate Now' })).toHaveAttribute(

@@ -12,7 +12,7 @@ Ad Grants**, so it must stay content-rich, fast, secure, and free of broken link
 
 Pages: Home, About, Programs (+ one page per program), AI & Technology, Get Involved,
 Donate, Contact, and Privacy. Visitors can request program info (two-step form), send
-a contact message, and donate through an external PayPal link. Both forms are emailed
+a contact message, and donate through an external Zeffy donation page. Both forms are emailed
 to staff over SMTP. Deployed on Vercel.
 
 There's no database, no auth, and no user accounts. Server-side logic is two Server
@@ -81,7 +81,7 @@ components/
   forms/                          Shared form parts: success, consent, honeypot, alert, focus hook
   request-info-form/              Two-step request-info form (client)
   contact-form/                   Contact form (client) + ?topic= preselect wrapper
-  donate/paypal-button.tsx        Outbound PayPal link that records a donate_click
+  donate/donate-button.tsx        "Donate Now": outbound Zeffy link that records a donate_click
   analytics/google-tag.tsx        Loads gtag.js only when IDs are configured
   pwa/service-worker-registration.tsx   Registers /sw.js in production builds only
   seo/structured-data.tsx         JSON-LD @graph builders with safe serialization
@@ -100,7 +100,7 @@ lib/
   csp.ts                          buildContentSecurityPolicy()
   pwa/service-worker.ts           Service worker source, version, precache list
   seo.ts                          buildMetadata / buildPageMetadata
-  site.ts                         Site name/description, getSiteUrl(), getPaypalUrl(), anchor ids
+  site.ts                         Site name/description, getSiteUrl(), getDonationUrl(), anchor ids
   cn.ts                           className joiner
 brand/                            Logo sources: generate-svgs.py (single geometry) → SVGs, og-image.html
 scripts/check-links.mjs           Link/anchor crawler used by CI
@@ -116,25 +116,23 @@ Tests sit next to the code they cover, named `*.test.ts(x)`.
 Never commit `.env*` files except `.env.example`. Configure real values in Vercel and
 in a local `.env.local`.
 
-| Variable                              | Scope  | Purpose                                                                                 |
-| ------------------------------------- | ------ | --------------------------------------------------------------------------------------- |
-| `SMTP_HOST`                           | server | SMTP server host                                                                        |
-| `SMTP_PORT`                           | server | SMTP port (number)                                                                      |
-| `SMTP_SECURE`                         | server | `"true"` for implicit TLS (usually port 465)                                            |
-| `SMTP_USER`                           | server | SMTP username                                                                           |
-| `SMTP_PASS`                           | server | SMTP password / app password                                                            |
-| `SMTP_FROM`                           | server | Sender address (optional, defaults to `SMTP_USER`)                                      |
-| `FORM_TO_EMAIL`                       | server | Inbox that receives form submissions                                                    |
-| `NEXT_PUBLIC_SITE_URL`                | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost |
-| `NEXT_PUBLIC_PAYPAL_URL`              | client | PayPal donation link; must be `https://`, or the button is hidden                       |
-| `NEXT_PUBLIC_CONTACT_EMAIL`           | client | Public contact email (footer, Contact, Privacy, JSON-LD); hidden until set              |
-| `NEXT_PUBLIC_CONTACT_PHONE`           | client | Optional public phone number                                                            |
-| `NEXT_PUBLIC_MAILING_ADDRESS`         | client | Optional mailing address; `\n` separates lines                                          |
-| `NEXT_PUBLIC_EIN`                     | client | Optional EIN (`12-3456789`); shown on About/Donate/footer                               |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID`       | client | GA4 ID (`G-…`); enables the Google tag and its CSP hosts                                |
-| `NEXT_PUBLIC_GOOGLE_ADS_ID`           | client | Google Ads ID (`AW-…`)                                                                  |
-| `NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL`   | client | Ads conversion label for form submissions                                               |
-| `NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL` | client | Ads conversion label for PayPal clicks                                                  |
+| Variable                              | Scope  | Purpose                                                                                                                                                                                     |
+| ------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SMTP_HOST`                           | server | SMTP server host                                                                                                                                                                            |
+| `SMTP_PORT`                           | server | SMTP port (number)                                                                                                                                                                          |
+| `SMTP_SECURE`                         | server | `"true"` for implicit TLS (usually port 465)                                                                                                                                                |
+| `SMTP_USER`                           | server | SMTP username                                                                                                                                                                               |
+| `SMTP_PASS`                           | server | SMTP password / app password                                                                                                                                                                |
+| `SMTP_FROM`                           | server | Sender address (optional, defaults to `SMTP_USER`)                                                                                                                                          |
+| `FORM_TO_EMAIL`                       | server | Inbox that receives form submissions                                                                                                                                                        |
+| `NEXT_PUBLIC_SITE_URL`                | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost                                                                                                     |
+| `NEXT_PUBLIC_DONATION_URL`            | client | Official Zeffy donation page; must be an `https://` zeffy.com URL, or Donate Now falls back to `/donate` (the legacy `NEXT_PUBLIC_PAYPAL_URL` is still read as a fallback, Zeffy URLs only) |
+| `NEXT_PUBLIC_CONTACT_EMAIL`           | client | Public contact email (footer, Contact, Privacy, JSON-LD); hidden until set                                                                                                                  |
+| `NEXT_PUBLIC_CONTACT_PHONE`           | client | Optional public phone number                                                                                                                                                                |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`       | client | GA4 ID (`G-…`); enables the Google tag and its CSP hosts                                                                                                                                    |
+| `NEXT_PUBLIC_GOOGLE_ADS_ID`           | client | Google Ads ID (`AW-…`)                                                                                                                                                                      |
+| `NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL`   | client | Ads conversion label for form submissions                                                                                                                                                   |
+| `NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL` | client | Ads conversion label for Donate Now (Zeffy) clicks                                                                                                                                          |
 
 Rules:
 
@@ -142,7 +140,7 @@ Rules:
   with Zod and is lazy, so `next build` doesn't need SMTP credentials.
 - `NEXT_PUBLIC_*` values are baked into the JS bundle. Never put secrets in them.
 - Never read `NEXT_PUBLIC_*` values from `process.env` directly in components. Use the
-  validating getters: `getSiteUrl()` / `getPaypalUrl()` (`lib/site.ts`),
+  validating getters: `getSiteUrl()` / `getDonationUrl()` (`lib/site.ts`),
   `getContactInfo()` (`lib/content/organization.ts`), and `getAnalyticsConfig()`
   (`lib/analytics-config.ts`). Malformed values are dropped, never rendered.
 - **Set `NEXT_PUBLIC_SITE_URL` in Vercel production** to the real domain, or canonical
@@ -157,7 +155,7 @@ Rules:
 - **Server Components by default.** Every page is prerendered as static HTML at build
   time (program pages via `generateStaticParams`, with `dynamicParams = false`).
 - **`'use client'` only on the smallest interactive subtree:** the two forms, the nav
-  links (`aria-current`), the mobile menu, and the PayPal button (click tracking).
+  links (`aria-current`), the mobile menu, and the Donate Now button (click tracking).
   Don't add it to sections or pages.
 - `useSearchParams` must sit under a `<Suspense>` boundary so pages stay static (see
   `app/contact/page.tsx`).
@@ -227,7 +225,8 @@ Leadership Development.
 
 Order: Hero (501(c)(3) line, headline, intro, the four areas as linked badges,
 Support Our Mission, the request-info form) → At a Glance → Our Programs → Mission &
-Vision → feature videos → Building for Impact → donate prompt. The four areas get
+Vision → feature videos → Community Impact (verified results; hidden until data
+exists) → Building for Impact (goals) → donate prompt. The four areas get
 equal weight (same card and icon treatment); don't give one area its own extra
 homepage section. Icons come from `components/ui/program-icon.tsx`. "At a Glance"
 answers must quote existing site copy (a test enforces it).
@@ -252,6 +251,27 @@ answers must quote existing site copy (a test enforces it).
   (client policy). The original template testimonial was removed; there is no
   testimonial section until the client supplies approved ones. Never add sample,
   placeholder, or invented quotes.
+- **Organization facts** (`organization.ts`): legal name, `EIN` (39-3626296), and
+  `MAILING_ADDRESS` (Detroit, MI 48235; no street line was provided) are
+  client-supplied constants shown on About, Donate, Contact, the footer, and in
+  structured data. Only the public email and phone come from env vars.
+- **Programs: operating vs planned.** Every program has a `status`
+  (`'operating' | 'planned'`) and the site shows "Operating now" or "Planned
+  expansion" plus `PROGRAM_AGES` (Grades 2–12) on cards and program pages. As
+  confirmed by the client (2026-11-02), all four programs are operating. Never
+  describe a planned program as running; goals and expansion plans belong in Vision
+  and Building for Impact.
+- **Verified-data sections** stay hidden until filled, so nothing unverified is ever
+  published:
+  - `community-impact.ts`: `VERIFIED_METRICS` (food distribution, volunteers, youth
+    programs), each with `period`, `source`, and `verifiedOn`, plus
+    `PROGRAM_PROGRESS` milestones. Homepage section.
+  - `leadership.ts`: `FOUNDER_STORY`, `FOUNDER`, and `BOARD` (photos in
+    `public/team/`). About page sections "Our Story" and "Leadership & Board".
+  - `financials.ts`: `AWARDED_GRANTS`, `DONATION_SUMMARIES`, and
+    `PENDING_GRANT_REQUESTS` in **separate tables with separate totals**; pending
+    requests are labeled as not awarded and never counted as income. Donate page.
+    Tests validate every entry (sources, ISO dates, positive whole-dollar amounts).
 - `NONPROFIT_STATEMENT` ("Future of the Youth Limited is a 501(c)(3) nonprofit
   organization.") is the client's exact wording; show it on About, Donate, Contact, the
   donate CTA, and the footer.
@@ -310,7 +330,7 @@ Screen") and works offline for pages a visitor has already opened.
   `app/sw.js/route.ts`): network-first for pages and RSC payloads, falling back to the
   cache and then `/offline`; cache-first for `/_next/static`; stale-while-revalidate
   for images. It handles **only same-origin GET** requests, so it never touches
-  Server Actions (form POSTs), PayPal, Google, or the Vercel toolbar, and it skips
+  Server Actions (form POSTs), Zeffy, Google, or the Vercel toolbar, and it skips
   videos and range requests. Runtime caches are capped at 60 entries each.
 - **Vercel:** the worker version is `VERCEL_DEPLOYMENT_ID` (falling back to the
   commit SHA, then the build time), so each deploy installs a fresh worker and deletes
@@ -467,12 +487,21 @@ release:
 
 - Approve all `// DRAFT` copy, the consent notice
   (`components/forms/consent-notice.tsx`), and the privacy policy (`app/privacy`).
-- Confirm the legal name "Future of the Youth" exactly matches the IRS
-  determination letter. Provide the EIN, a public contact email, and (optionally) a
-  phone number and mailing address.
-- Provide the real PayPal donation URL, the custom domain, and the GA4 / Google Ads IDs
-  and conversion labels.
-- Optional, for grant reviewers: founder story, team/board, social links.
+- Confirm the legal name exactly matches the IRS determination letter (the site
+  shows both "Future of the Youth" and "Future of the Youth Limited").
+- Provide: the official Zeffy donation URL (`NEXT_PUBLIC_DONATION_URL`), a public
+  contact email, the custom domain, and the GA4 / Google Ads IDs and conversion
+  labels.
+- Provide verified data for the hidden sections (Ad Grants reviewers asked for them):
+  - **Community impact:** food distribution totals, volunteer counts/hours, youth
+    served and program milestones, each with the period, source document, and date
+    verified.
+  - **Founder and leadership:** the founding story, the founder's name/role/bio/photo,
+    and each board member's name, role, and short bio (photos optional).
+  - **Financials:** grants awarded (funder, amount, date, purpose), donations received
+    by period, and pending grant requests (funder, amount requested, date submitted).
+- Done (2026-11-02): address and EIN added; all four programs confirmed operating;
+  ages confirmed as grades 2–12; donation provider switched to Zeffy.
 
 ## Known issues / follow-ups
 

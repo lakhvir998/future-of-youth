@@ -17,5 +17,5 @@ Claude-specific notes here.
   consider running `/security-review` before committing.
 - **Large changes** (new sections, new Server Actions, dependency upgrades): propose
   a short plan first and do them as separate, reviewable commits.
-- **Questions to escalate, not guess:** legal/consent copy, testimonials, the PayPal
+- **Questions to escalate, not guess:** legal/consent copy, testimonials, the Zeffy donation
   URL, and the recipient email address all belong to the organization.

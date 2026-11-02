@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
 import { DonateCta } from '@/components/sections/donate-cta';
+import { LeadershipSection } from '@/components/sections/leadership-section';
+import { OurStorySection } from '@/components/sections/our-story-section';
 import { PageHero } from '@/components/sections/page-hero';
 import { StructuredData } from '@/components/seo/structured-data';
 import { buttonClasses } from '@/components/ui/button';
@@ -19,7 +21,7 @@ import {
   ORIGINAL_INTRO,
 } from '@/lib/content/home';
 import {
-  getContactInfo,
+  EIN,
   NONPROFIT_STATEMENT,
   TAX_DEDUCTIBLE_STATEMENT,
 } from '@/lib/content/organization';
@@ -32,7 +34,6 @@ export const metadata = buildPageMetadata(PAGE.path);
 
 export default function AboutPage() {
   const breadcrumbs = breadcrumbsFor(PAGE.path);
-  const { ein } = getContactInfo();
 
   return (
     <>
@@ -47,6 +48,8 @@ export default function AboutPage() {
         intro={<p>{ABOUT_INTRO}</p>}
         breadcrumbs={breadcrumbs}
       />
+
+      <OurStorySection />
 
       <Section id='mission' title={MISSION_TITLE} tone='white'>
         <div className='max-w-3xl space-y-4 text-lg text-ink'>
@@ -94,12 +97,14 @@ export default function AboutPage() {
         </ul>
       </Section>
 
+      <LeadershipSection />
+
       <Section id='nonprofit-status' title='Nonprofit Status'>
         <div className='max-w-3xl space-y-3 text-lg text-ink'>
           <p>
             <strong>{NONPROFIT_STATEMENT}</strong> {TAX_DEDUCTIBLE_STATEMENT}
           </p>
-          {ein && <p>Employer Identification Number (EIN): {ein}</p>}
+          <p>Employer Identification Number (EIN): {EIN}</p>
           <p>{GRATITUDE}</p>
         </div>
       </Section>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { ProgramIcon } from '@/components/ui/program-icon';
+import { ProgramStatusBadges } from '@/components/ui/program-status';
 import type { Program } from '@/lib/content/programs';
 
 type ProgramCardProps = {
@@ -24,6 +25,7 @@ export function ProgramCard({
           {program.title}
         </Heading>
       </div>
+      <ProgramStatusBadges status={program.status} />
       <p className='flex-1 text-ink'>{program.summary}</p>
       <Link
         href={program.href}

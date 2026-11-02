@@ -2,7 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import {
+  EIN,
   getContactInfo,
+  MAILING_ADDRESS,
   NONPROFIT_STATEMENT,
   ORGANIZATION,
   phoneHref,
@@ -26,7 +28,7 @@ export function SiteFooter() {
           </p>
           <p>{SITE_SLOGAN}</p>
           <p>{NONPROFIT_STATEMENT}</p>
-          {contact.ein && <p>EIN: {contact.ein}</p>}
+          <p>EIN: {EIN}</p>
         </div>
 
         <nav aria-label='Footer'>
@@ -59,13 +61,9 @@ export function SiteFooter() {
                 </a>
               </li>
             )}
-            {contact.address && (
-              <li>
-                <address className='whitespace-pre-line not-italic'>
-                  {contact.address}
-                </address>
-              </li>
-            )}
+            <li>
+              <address className='not-italic'>{MAILING_ADDRESS}</address>
+            </li>
             <li>
               <Link href='/contact' className={linkClasses}>
                 Send us a message

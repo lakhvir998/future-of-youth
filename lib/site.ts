@@ -30,17 +30,28 @@ export function getSiteUrl(): URL {
   return new URL('http://localhost:3000');
 }
 
+/** Donations are processed by Zeffy (the site's wording says so). */
+export const DONATION_PROVIDER = 'Zeffy';
+
 /**
- * Returns the PayPal URL only if it's a well-formed https link, so a
- * misconfigured value (e.g. `javascript:`) can never be rendered as a link.
+ * Returns the official Zeffy donation page URL, or undefined. Only https links
+ * on zeffy.com are accepted, so a misconfigured value (another provider, or
+ * `javascript:`) can never be rendered behind wording that says "Zeffy".
+ *
+ * NEXT_PUBLIC_PAYPAL_URL is still read as a fallback because production already
+ * has the Zeffy link stored under that old name; the zeffy.com check means an
+ * actual PayPal link there is still rejected.
  */
-export function getPaypalUrl(): string | undefined {
-  const raw = process.env.NEXT_PUBLIC_PAYPAL_URL;
+export function getDonationUrl(): string | undefined {
+  const raw =
+    process.env.NEXT_PUBLIC_DONATION_URL || process.env.NEXT_PUBLIC_PAYPAL_URL;
   if (!raw) return undefined;
 
   try {
     const url = new URL(raw);
-    return url.protocol === 'https:' ? url.toString() : undefined;
+    const isZeffy =
+      url.hostname === 'zeffy.com' || url.hostname.endsWith('.zeffy.com');
+    return url.protocol === 'https:' && isZeffy ? url.toString() : undefined;
   } catch {
     return undefined;
   }

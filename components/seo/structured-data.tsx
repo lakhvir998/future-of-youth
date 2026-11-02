@@ -1,9 +1,9 @@
 import { MISSION_STATEMENT } from '@/lib/content/home';
-import { getContactInfo, ORGANIZATION } from '@/lib/content/organization';
+import { EIN, getContactInfo, ORGANIZATION } from '@/lib/content/organization';
 import type { Crumb } from '@/lib/content/pages';
 import { PROGRAMS, type Program } from '@/lib/content/programs';
 import {
-  getPaypalUrl,
+  getDonationUrl,
   getSiteUrl,
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -29,7 +29,7 @@ const WEBSITE_ID = () => absoluteUrl('/#website');
 
 export function buildOrganizationNode(): JsonLdNode {
   const contact = getContactInfo();
-  const paypalUrl = getPaypalUrl();
+  const donationUrl = getDonationUrl();
 
   return {
     '@type': 'NGO',
@@ -55,20 +55,19 @@ export function buildOrganizationNode(): JsonLdNode {
     knowsAbout: PROGRAMS.map((program) => program.title),
     ...(contact.email && { email: contact.email }),
     ...(contact.phone && { telephone: contact.phone }),
-    ...(contact.ein && { taxID: contact.ein }),
-    ...(contact.address && {
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: contact.address.replace(/\n/g, ', '),
-        addressLocality: ORGANIZATION.city,
-        addressRegion: ORGANIZATION.regionCode,
-        addressCountry: ORGANIZATION.country,
-      },
-    }),
-    ...(paypalUrl && {
+    taxID: EIN,
+    // City, state, and ZIP as supplied by the client (no street line).
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: ORGANIZATION.city,
+      addressRegion: ORGANIZATION.regionCode,
+      postalCode: ORGANIZATION.postalCode,
+      addressCountry: ORGANIZATION.country,
+    },
+    ...(donationUrl && {
       potentialAction: {
         '@type': 'DonateAction',
-        target: paypalUrl,
+        target: donationUrl,
         recipient: { '@id': ORGANIZATION_ID() },
       },
     }),

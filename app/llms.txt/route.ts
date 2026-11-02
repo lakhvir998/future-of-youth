@@ -11,7 +11,7 @@ import { NONPROFIT_STATEMENT } from '@/lib/content/organization';
 import { PAGES } from '@/lib/content/pages';
 import { PROGRAMS } from '@/lib/content/programs';
 import {
-  getPaypalUrl,
+  getDonationUrl,
   getSiteUrl,
   REQUEST_INFO_HREF,
   SITE_DESCRIPTION,
@@ -25,7 +25,7 @@ export const dynamic = 'force-static';
 export function GET() {
   const siteUrl = getSiteUrl();
   const url = (path: string) => new URL(path, siteUrl).toString();
-  const paypalUrl = getPaypalUrl();
+  const donationUrl = getDonationUrl();
 
   const body = `# ${SITE_NAME}
 
@@ -68,7 +68,7 @@ ${Object.values(PAGES)
 ## Take Action
 
 - [Request Free Program Info](${url(REQUEST_INFO_HREF)})
-- [Donate](${url('/donate')})${paypalUrl ? `\n- [Donate Now (PayPal)](${paypalUrl})` : ''}
+- [Donate](${url('/donate')})${donationUrl ? `\n- [Donate Now (Zeffy)](${donationUrl})` : ''}
 - [Get Involved](${url('/get-involved')})
 - [Contact](${url('/contact')})
 `;

@@ -93,3 +93,19 @@ describe("client's program list", () => {
     );
   });
 });
+
+describe('program status (operating vs planned)', () => {
+  it('records a status for every program, as confirmed by the client', async () => {
+    const { PROGRAMS: programs } = await import('./programs');
+    expect(
+      Object.fromEntries(
+        programs.map((program) => [program.slug, program.status])
+      )
+    ).toEqual({
+      entrepreneurship: 'operating',
+      'financial-literacy': 'operating',
+      'ai-technology': 'operating',
+      'career-leadership': 'operating',
+    });
+  });
+});

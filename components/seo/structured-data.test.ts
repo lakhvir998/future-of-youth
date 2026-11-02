@@ -36,14 +36,20 @@ describe('buildOrganizationNode', () => {
     });
   });
 
-  it('includes contact details only when they are configured', () => {
+  it('includes the EIN and address, and email only when configured', () => {
     expect(buildOrganizationNode()).not.toHaveProperty('email');
+    expect(buildOrganizationNode()).toMatchObject({
+      taxID: '39-3626296',
+      address: {
+        addressLocality: 'Detroit',
+        addressRegion: 'MI',
+        postalCode: '48235',
+      },
+    });
 
     vi.stubEnv('NEXT_PUBLIC_CONTACT_EMAIL', 'info@example.org');
-    vi.stubEnv('NEXT_PUBLIC_EIN', '12-3456789');
     expect(buildOrganizationNode()).toMatchObject({
       email: 'info@example.org',
-      taxID: '12-3456789',
     });
   });
 });

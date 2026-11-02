@@ -2,7 +2,7 @@
 // Crawls the production build and fails if any internal link, asset, or
 // #anchor is broken. Run after `next build`: `npm run check:links`.
 // Absolute URLs on NEXT_PUBLIC_SITE_URL (canonical, Open Graph) are checked
-// against the local server. Other external links (e.g. PayPal) are listed but
+// against the local server. Other external links (e.g. Zeffy) are listed but
 // not fetched.
 
 import { spawn } from 'node:child_process';

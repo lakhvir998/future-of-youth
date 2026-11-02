@@ -5,17 +5,17 @@ import { trackEvent } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 import { DONATE_BUTTON_LABEL } from '@/lib/content/donate';
 
-type PaypalButtonProps = {
+type DonateButtonProps = {
   href: string;
   location: 'donate_page' | 'donate_cta';
   className?: string;
 };
 
 /**
- * The prominent "Donate Now" button: an outbound link to the official PayPal
+ * The prominent "Donate Now" button: an outbound link to the official Zeffy
  * donation page that records a donate_click conversion (no PII).
  */
-export function PaypalButton({ href, location, className }: PaypalButtonProps) {
+export function DonateButton({ href, location, className }: DonateButtonProps) {
   return (
     <a
       href={href}
@@ -29,7 +29,7 @@ export function PaypalButton({ href, location, className }: PaypalButtonProps) {
       )}
     >
       {DONATE_BUTTON_LABEL}{' '}
-      <span className='sr-only'>(opens PayPal in a new tab)</span>
+      <span className='sr-only'>(opens Zeffy in a new tab)</span>
     </a>
   );
 }

@@ -7,7 +7,9 @@ import { PageHero } from '@/components/sections/page-hero';
 import { StructuredData } from '@/components/seo/structured-data';
 import { Card } from '@/components/ui/card';
 import {
+  EIN,
   getContactInfo,
+  MAILING_ADDRESS,
   NONPROFIT_STATEMENT,
   phoneHref,
 } from '@/lib/content/organization';
@@ -91,14 +93,10 @@ export default function ContactPage() {
                   </a>
                 </li>
               )}
-              {contact.address && (
-                <li>
-                  <span className='block font-semibold'>Mailing address</span>
-                  <address className='whitespace-pre-line not-italic'>
-                    {contact.address}
-                  </address>
-                </li>
-              )}
+              <li>
+                <span className='block font-semibold'>Mailing address</span>
+                <address className='not-italic'>{MAILING_ADDRESS}</address>
+              </li>
               <li>
                 <span className='block font-semibold'>
                   Parents and families
@@ -108,7 +106,9 @@ export default function ContactPage() {
                 </Link>
               </li>
             </ul>
-            <p className='text-sm text-gray-700'>{NONPROFIT_STATEMENT}</p>
+            <p className='text-sm text-gray-700'>
+              {NONPROFIT_STATEMENT} EIN: {EIN}
+            </p>
           </Card>
         </aside>
       </div>

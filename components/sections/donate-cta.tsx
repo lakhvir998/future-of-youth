@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { PaypalButton } from '@/components/donate/paypal-button';
+import { DonateButton } from '@/components/donate/donate-button';
 import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -12,11 +12,11 @@ import {
   NONPROFIT_STATEMENT,
   TAX_DEDUCTIBLE_STATEMENT,
 } from '@/lib/content/organization';
-import { getPaypalUrl } from '@/lib/site';
+import { getDonationUrl } from '@/lib/site';
 
 /** Donation prompt used at the bottom of most pages. */
 export function DonateCta() {
-  const paypalUrl = getPaypalUrl();
+  const donationUrl = getDonationUrl();
 
   return (
     <section
@@ -35,10 +35,10 @@ export function DonateCta() {
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
-        {paypalUrl ? (
-          <PaypalButton href={paypalUrl} location='donate_cta' />
+        {donationUrl ? (
+          <DonateButton href={donationUrl} location='donate_cta' />
         ) : (
-          // Until the PayPal link is configured, send donors to the donate page,
+          // Until the Zeffy link is configured, send donors to the donate page,
           // which explains how to give.
           <Link
             href='/donate'
