@@ -22,11 +22,11 @@ describe('getAnalyticsConfig', () => {
 
   it('drops values that could inject script', () => {
     vi.stubEnv('NEXT_PUBLIC_GA_MEASUREMENT_ID', "G-1');alert(1);//");
-    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL', '</script>');
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL', '</script>');
 
     const config = getAnalyticsConfig();
     expect(config.gaMeasurementId).toBeUndefined();
-    expect(config.adsLeadLabel).toBeUndefined();
+    expect(config.adsContactLabel).toBeUndefined();
     expect(isAnalyticsEnabled(config)).toBe(false);
   });
 });
@@ -59,6 +59,38 @@ describe('trackEvent', () => {
 
     expect(gtag).toHaveBeenCalledWith('event', 'conversion', {
       send_to: 'AW-123456789/abcDEF_123',
+    });
+  });
+
+  it('counts only a contact-form submission as the lead conversion', () => {
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_ID', 'AW-123456789');
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL', 'contact_LABEL1');
+    const gtag = vi.fn();
+    window.gtag = gtag;
+
+    trackEvent('generate_lead', { form: 'request_info' });
+    expect(gtag).not.toHaveBeenCalledWith(
+      'event',
+      'conversion',
+      expect.anything()
+    );
+
+    trackEvent('generate_lead', { form: 'contact' });
+    expect(gtag).toHaveBeenCalledWith('event', 'conversion', {
+      send_to: 'AW-123456789/contact_LABEL1',
+    });
+  });
+
+  it('does not use the contact label for Donate Now clicks', () => {
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_ID', 'AW-123456789');
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL', 'contact_LABEL1');
+    const gtag = vi.fn();
+    window.gtag = gtag;
+
+    trackEvent('donate_click', { location: 'header' });
+
+    expect(gtag).toHaveBeenCalledExactlyOnceWith('event', 'donate_click', {
+      location: 'header',
     });
   });
 });

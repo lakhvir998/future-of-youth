@@ -116,23 +116,23 @@ Tests sit next to the code they cover, named `*.test.ts(x)`.
 Never commit `.env*` files except `.env.example`. Configure real values in Vercel and
 in a local `.env.local`.
 
-| Variable                              | Scope  | Purpose                                                                                                                                                                                     |
-| ------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SMTP_HOST`                           | server | SMTP server host                                                                                                                                                                            |
-| `SMTP_PORT`                           | server | SMTP port (number)                                                                                                                                                                          |
-| `SMTP_SECURE`                         | server | `"true"` for implicit TLS (usually port 465)                                                                                                                                                |
-| `SMTP_USER`                           | server | SMTP username                                                                                                                                                                               |
-| `SMTP_PASS`                           | server | SMTP password / app password                                                                                                                                                                |
-| `SMTP_FROM`                           | server | Sender address (optional, defaults to `SMTP_USER`)                                                                                                                                          |
-| `FORM_TO_EMAIL`                       | server | Inbox that receives form submissions                                                                                                                                                        |
-| `NEXT_PUBLIC_SITE_URL`                | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost                                                                                                     |
-| `NEXT_PUBLIC_DONATION_URL`            | client | Official Zeffy donation page; must be an `https://` zeffy.com URL, or Donate Now falls back to `/donate` (the legacy `NEXT_PUBLIC_PAYPAL_URL` is still read as a fallback, Zeffy URLs only) |
-| `NEXT_PUBLIC_CONTACT_EMAIL`           | client | Public contact email (footer, Contact, Privacy, JSON-LD); hidden until set                                                                                                                  |
-| `NEXT_PUBLIC_CONTACT_PHONE`           | client | Optional public phone number                                                                                                                                                                |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID`       | client | GA4 ID (`G-…`); enables the Google tag and its CSP hosts                                                                                                                                    |
-| `NEXT_PUBLIC_GOOGLE_ADS_ID`           | client | Google Ads ID (`AW-…`)                                                                                                                                                                      |
-| `NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL`   | client | Ads conversion label for form submissions                                                                                                                                                   |
-| `NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL` | client | Ads conversion label for Donate Now (Zeffy) clicks                                                                                                                                          |
+| Variable                               | Scope  | Purpose                                                                                                                                                                                     |
+| -------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SMTP_HOST`                            | server | SMTP server host                                                                                                                                                                            |
+| `SMTP_PORT`                            | server | SMTP port (number)                                                                                                                                                                          |
+| `SMTP_SECURE`                          | server | `"true"` for implicit TLS (usually port 465)                                                                                                                                                |
+| `SMTP_USER`                            | server | SMTP username                                                                                                                                                                               |
+| `SMTP_PASS`                            | server | SMTP password / app password                                                                                                                                                                |
+| `SMTP_FROM`                            | server | Sender address (optional, defaults to `SMTP_USER`)                                                                                                                                          |
+| `FORM_TO_EMAIL`                        | server | Inbox that receives form submissions                                                                                                                                                        |
+| `NEXT_PUBLIC_SITE_URL`                 | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost                                                                                                     |
+| `NEXT_PUBLIC_DONATION_URL`             | client | Official Zeffy donation page; must be an `https://` zeffy.com URL, or Donate Now falls back to `/donate` (the legacy `NEXT_PUBLIC_PAYPAL_URL` is still read as a fallback, Zeffy URLs only) |
+| `NEXT_PUBLIC_CONTACT_EMAIL`            | client | Public contact email (footer, Contact, Privacy, JSON-LD); hidden until set                                                                                                                  |
+| `NEXT_PUBLIC_CONTACT_PHONE`            | client | Optional public phone number                                                                                                                                                                |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`        | client | GA4 ID (`G-…`); enables the Google tag and its CSP hosts                                                                                                                                    |
+| `NEXT_PUBLIC_GOOGLE_ADS_ID`            | client | Google Ads ID (`AW-…`)                                                                                                                                                                      |
+| `NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL` | client | Ads conversion label; fires only after a successful contact-form submission                                                                                                                 |
+| `NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL`  | client | Ads conversion label for Donate Now (Zeffy) clicks                                                                                                                                          |
 
 Rules:
 
@@ -351,6 +351,10 @@ Screen") and works offline for pages a visitor has already opened.
 - Required for Google Ad Grants conversion tracking. It's off unless
   `NEXT_PUBLIC_GA_MEASUREMENT_ID` or `NEXT_PUBLIC_GOOGLE_ADS_ID` is set; then
   `GoogleTag` loads gtag.js and the CSP adds Google's hosts automatically (`lib/csp.ts`).
+- The Google Ads lead conversion (`NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL`) fires only
+  after the contact form's Server Action succeeds, never on page views or clicks.
+  Request-info submissions still send `generate_lead` to GA4 but aren't an Ads
+  conversion.
 - Track only through `trackEvent()` in `lib/analytics.ts`. Its event schema is a closed
   set (`generate_lead { form }`, `donate_click { location }`). **Never send form values
   or any PII**; extend the typed schema with enum-only params if you need a new event.
@@ -537,3 +541,13 @@ release:
    write as `// DRAFT: client to approve`.
 7. When you add a dependency, script, env var, or top-level directory, update this
    file and the README in the same change.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
