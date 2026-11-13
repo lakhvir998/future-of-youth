@@ -5,7 +5,7 @@
 export type AnalyticsConfig = {
   gaMeasurementId?: string;
   adsId?: string;
-  adsLeadLabel?: string;
+  adsContactLabel?: string;
   adsDonateLabel?: string;
 };
 
@@ -24,8 +24,8 @@ export function getAnalyticsConfig(): AnalyticsConfig {
   return {
     gaMeasurementId: read(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, GA_ID),
     adsId: read(process.env.NEXT_PUBLIC_GOOGLE_ADS_ID, ADS_ID),
-    adsLeadLabel: read(
-      process.env.NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL,
+    adsContactLabel: read(
+      process.env.NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL,
       ADS_LABEL
     ),
     adsDonateLabel: read(
