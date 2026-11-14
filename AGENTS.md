@@ -364,6 +364,11 @@ Screen") and works offline for pages a visitor has already opened.
 - The Ads script host `googleads.g.doubleclick.net` must stay in the CSP's
   `script-src` (`GOOGLE_TAG_CSP` in `lib/analytics-config.ts`), or every page logs a
   CSP error that Tag Assistant reports.
+- Remarketing pings go to the visitor's **country** Google domain
+  (`www.google.co.in/pagead/1p-user-list`, `google.co.uk`, …). CSP can't wildcard a
+  TLD, so while the Google tag is on, `img-src` allows `https:`. Scripts stay limited
+  to the listed Google hosts. When testing, don't stub Google's first response: the
+  country-domain request only happens after the real `google.com` reply.
 - Track only through `trackEvent()` in `lib/analytics.ts`. Its event schema is a closed
   set (`generate_lead { form }`, `donate_click { location }`). **Never send form values
   or any PII**; extend the typed schema with enum-only params if you need a new event.

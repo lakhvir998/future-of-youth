@@ -61,12 +61,10 @@ export const GOOGLE_TAG_CSP = {
     'https://*.doubleclick.net',
     'https://www.googleadservices.com',
   ],
-  img: [
-    'https://*.google-analytics.com',
-    'https://*.googletagmanager.com',
-    'https://*.doubleclick.net',
-    'https://www.google.com',
-    'https://www.googleadservices.com',
-  ],
+  // Google Ads remarketing pings go to the visitor's country domain
+  // (www.google.co.in, www.google.co.uk, …; about 190 of them). CSP can't
+  // wildcard a TLD, so images are allowed from any https origin while the
+  // Google tag is on. Scripts stay restricted to the hosts above.
+  img: ['https:'],
   frame: ['https://*.doubleclick.net', 'https://www.googletagmanager.com'],
 };

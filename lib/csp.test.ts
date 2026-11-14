@@ -14,6 +14,8 @@ describe('buildContentSecurityPolicy', () => {
     expect(csp).toContain("object-src 'none'");
     expect(csp).toContain('upgrade-insecure-requests');
     expect(csp).not.toContain('google');
+    // Without the Google tag, images stay same-origin only.
+    expect(csp).toContain("img-src 'self' data: blob:;");
     expect(csp).not.toContain('unsafe-eval');
   });
 
@@ -25,6 +27,8 @@ describe('buildContentSecurityPolicy', () => {
       /script-src [^;]*https:\/\/googleads\.g\.doubleclick\.net/
     );
     expect(csp).toMatch(/connect-src [^;]*https:\/\/\*\.google-analytics\.com/);
+    // Remarketing pings use country domains like www.google.co.in.
+    expect(csp).toMatch(/img-src [^;]*https:(\s|;|$)/);
   });
 
   it('adds dev-only allowances in development', () => {
