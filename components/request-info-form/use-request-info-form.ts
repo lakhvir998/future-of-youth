@@ -1,4 +1,4 @@
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 
 import { submitRequestInfo } from '@/app/actions/submit-request-info';
 import { trackEvent } from '@/lib/analytics';
@@ -57,6 +57,7 @@ export function useRequestInfoForm() {
   // invalid field, even when the same errors repeat (WCAG 3.3.1 / 2.4.3).
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const submittingRef = useRef(false);
 
   function updateParent<K extends keyof ParentFormState>(
     field: K,
@@ -92,7 +93,10 @@ export function useRequestInfoForm() {
   }
 
   function submit() {
-    if (isPending) return;
+    // isPending only updates on the next render, so two clicks in the same
+    // instant both got through (two emails, two Ads conversions). The ref is
+    // set synchronously on the first click.
+    if (isPending || submittingRef.current) return;
 
     const errors = getFieldErrors(childSchema, child);
     setChildErrors(errors ?? {});
@@ -102,6 +106,7 @@ export function useRequestInfoForm() {
     }
 
     setFormError(null);
+    submittingRef.current = true;
     startTransition(async () => {
       try {
         const result = await submitRequestInfo({
@@ -110,16 +115,19 @@ export function useRequestInfoForm() {
           website: honeypot,
         });
         if (result.ok) {
+          // Stays locked: the form is replaced by the thank-you message.
           setIsSubmitted(true);
           trackEvent('generate_lead', { form: 'request_info' });
-        } else {
-          setFormError(result.message);
+          return;
         }
+        setFormError(result.message);
       } catch {
         setFormError(
           'Something went wrong. Please check your connection and try again.'
         );
       }
+      // Failed: unlock so the visitor can try again.
+      submittingRef.current = false;
     });
   }
 

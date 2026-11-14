@@ -48,6 +48,9 @@ export const GOOGLE_TAG_CSP = {
     'https://*.googletagmanager.com',
     'https://www.googleadservices.com',
     'https://www.google.com',
+    // Google Ads loads its remarketing/view-through script from here; without it
+    // every page logged a CSP error (and Tag Assistant flagged it).
+    'https://googleads.g.doubleclick.net',
   ],
   connect: [
     'https://*.google-analytics.com',

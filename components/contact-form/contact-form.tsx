@@ -46,6 +46,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactTopic }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
 
   useFocusFirstInvalid(formRef, failedAttempts);
 
@@ -68,7 +69,10 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactTopic }) {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (isPending) return;
+    // isPending only updates on the next render, so two clicks in the same
+    // instant both got through (two emails, two Ads conversions). The ref is
+    // set synchronously on the first click.
+    if (isPending || submittingRef.current) return;
 
     const fieldErrors = getFieldErrors(contactSchema, values);
     setErrors(fieldErrors ?? {});
@@ -78,20 +82,24 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: ContactTopic }) {
     }
 
     setFormError(null);
+    submittingRef.current = true;
     startTransition(async () => {
       try {
         const result = await submitContact({ ...values, website: honeypot });
         if (result.ok) {
+          // Stays locked: the form is replaced by the thank-you message.
           setIsSubmitted(true);
           trackEvent('generate_lead', { form: 'contact' });
-        } else {
-          setFormError(result.message);
+          return;
         }
+        setFormError(result.message);
       } catch {
         setFormError(
           'Something went wrong. Please check your connection and try again.'
         );
       }
+      // Failed: unlock so the visitor can try again.
+      submittingRef.current = false;
     });
   }
 

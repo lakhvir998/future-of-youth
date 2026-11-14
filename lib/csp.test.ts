@@ -21,6 +21,9 @@ describe('buildContentSecurityPolicy', () => {
     const csp = buildContentSecurityPolicy({ ...base, googleTag: true });
 
     expect(csp).toMatch(/script-src [^;]*https:\/\/\*\.googletagmanager\.com/);
+    expect(csp).toMatch(
+      /script-src [^;]*https:\/\/googleads\.g\.doubleclick\.net/
+    );
     expect(csp).toMatch(/connect-src [^;]*https:\/\/\*\.google-analytics\.com/);
   });
 

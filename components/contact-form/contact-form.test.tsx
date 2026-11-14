@@ -75,3 +75,43 @@ describe('ContactForm', () => {
     );
   });
 });
+
+describe('ContactForm double submission', () => {
+  beforeEach(() => {
+    submitContact.mockReset();
+  });
+
+  it('submits once even when Send is clicked twice in the same instant', async () => {
+    submitContact.mockResolvedValue({ ok: true });
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fillForm(user);
+
+    const send = screen.getByRole('button', { name: /send message/i });
+    send.click();
+    send.click();
+
+    expect(
+      await screen.findByRole('heading', { name: 'Thank you!' })
+    ).toBeInTheDocument();
+    expect(submitContact).toHaveBeenCalledTimes(1);
+  });
+
+  it('allows a retry after a failed submission', async () => {
+    submitContact
+      .mockResolvedValueOnce({ ok: false, message: 'Try later.' })
+      .mockResolvedValueOnce({ ok: true });
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fillForm(user);
+
+    await user.click(screen.getByRole('button', { name: /send message/i }));
+    await screen.findByText('Try later.');
+    await user.click(screen.getByRole('button', { name: /send message/i }));
+
+    expect(
+      await screen.findByRole('heading', { name: 'Thank you!' })
+    ).toBeInTheDocument();
+    expect(submitContact).toHaveBeenCalledTimes(2);
+  });
+});

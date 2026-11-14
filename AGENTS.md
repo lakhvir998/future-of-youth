@@ -355,6 +355,15 @@ Screen") and works offline for pages a visitor has already opened.
   after the contact form's Server Action succeeds, never on page views or clicks.
   Request-info submissions still send `generate_lead` to GA4 but aren't an Ads
   conversion.
+- **No duplicate conversions:** both forms take a synchronous `submittingRef` lock on
+  the first click (`isPending` alone updates a render too late, so a double-click used
+  to send two emails and two Ads conversions). Keep the lock in any new form that
+  calls `trackEvent`.
+- Google Ads sends two requests per conversion (`googleadservices.com/pagead/conversion`
+  and `google.com/pagead/1p-conversion`); that's one conversion, not a duplicate.
+- The Ads script host `googleads.g.doubleclick.net` must stay in the CSP's
+  `script-src` (`GOOGLE_TAG_CSP` in `lib/analytics-config.ts`), or every page logs a
+  CSP error that Tag Assistant reports.
 - Track only through `trackEvent()` in `lib/analytics.ts`. Its event schema is a closed
   set (`generate_lead { form }`, `donate_click { location }`). **Never send form values
   or any PII**; extend the typed schema with enum-only params if you need a new event.
