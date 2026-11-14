@@ -16,6 +16,7 @@ describe('buildContentSecurityPolicy', () => {
     expect(csp).not.toContain('google');
     // Without the Google tag, images stay same-origin only.
     expect(csp).toContain("img-src 'self' data: blob:;");
+    expect(csp).toContain("connect-src 'self';");
     expect(csp).not.toContain('unsafe-eval');
   });
 
@@ -26,7 +27,8 @@ describe('buildContentSecurityPolicy', () => {
     expect(csp).toMatch(
       /script-src [^;]*https:\/\/googleads\.g\.doubleclick\.net/
     );
-    expect(csp).toMatch(/connect-src [^;]*https:\/\/\*\.google-analytics\.com/);
+    // Conversion pings 302 to country domains like www.google.co.in.
+    expect(csp).toMatch(/connect-src [^;]*https:(\s|;|$)/);
     // Remarketing pings use country domains like www.google.co.in.
     expect(csp).toMatch(/img-src [^;]*https:(\s|;|$)/);
   });

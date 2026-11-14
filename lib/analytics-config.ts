@@ -52,15 +52,13 @@ export const GOOGLE_TAG_CSP = {
     // every page logged a CSP error (and Tag Assistant flagged it).
     'https://googleads.g.doubleclick.net',
   ],
-  connect: [
-    'https://*.google-analytics.com',
-    'https://*.analytics.google.com',
-    'https://*.googletagmanager.com',
-    'https://www.google.com',
-    'https://google.com',
-    'https://*.doubleclick.net',
-    'https://www.googleadservices.com',
-  ],
+  // Conversion requests to www.google.com/pagead/1p-conversion are answered
+  // with a 302 to the visitor's country domain (www.google.co.in, …), and the
+  // redirect target must pass connect-src too. CSP can't wildcard a TLD, so
+  // fetch/beacon requests are allowed to any https origin while the Google tag
+  // is on. Scripts stay restricted (see `script`), so only our code and the
+  // Google tag can issue them.
+  connect: ['https:'],
   // Google Ads remarketing pings go to the visitor's country domain
   // (www.google.co.in, www.google.co.uk, …; about 190 of them). CSP can't
   // wildcard a TLD, so images are allowed from any https origin while the
