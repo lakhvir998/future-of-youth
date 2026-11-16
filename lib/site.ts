@@ -30,6 +30,12 @@ export function getSiteUrl(): URL {
   return new URL('http://localhost:3000');
 }
 
+/**
+ * Where Zeffy sends donors after a completed payment (the campaign's custom
+ * thank-you redirect). Records the completed-donation conversion.
+ */
+export const DONATION_THANK_YOU_PATH = '/donate/thank-you';
+
 /** Donations are processed by Zeffy (the site's wording says so). */
 export const DONATION_PROVIDER = 'Zeffy';
 
@@ -49,10 +55,29 @@ export function getDonationUrl(): string | undefined {
 
   try {
     const url = new URL(raw);
-    const isZeffy =
-      url.hostname === 'zeffy.com' || url.hostname.endsWith('.zeffy.com');
-    return url.protocol === 'https:' && isZeffy ? url.toString() : undefined;
+    return url.protocol === 'https:' && isZeffyHost(url.hostname)
+      ? url.toString()
+      : undefined;
   } catch {
     return undefined;
+  }
+}
+
+function isZeffyHost(hostname: string) {
+  return hostname === 'zeffy.com' || hostname.endsWith('.zeffy.com');
+}
+
+/**
+ * True when a page was reached from Zeffy over HTTPS (e.g. its post-payment
+ * redirect). Used to count completed donations only for real Zeffy arrivals,
+ * not for direct visits to the thank-you page.
+ */
+export function isZeffyReferrer(referrer: string): boolean {
+  if (!referrer) return false;
+  try {
+    const url = new URL(referrer);
+    return url.protocol === 'https:' && isZeffyHost(url.hostname);
+  } catch {
+    return false;
   }
 }

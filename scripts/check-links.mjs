@@ -63,9 +63,14 @@ async function main() {
   await waitForServer();
 
   const sitemap = await (await fetch(`${BASE}/sitemap.xml`)).text();
-  const queue = extract(sitemap, /<loc>([^<]+)<\/loc>/g).map(
-    (loc) => `${BASE}${new URL(loc).pathname}`
-  );
+  const queue = [
+    ...extract(sitemap, /<loc>([^<]+)<\/loc>/g).map(
+      (loc) => `${BASE}${new URL(loc).pathname}`
+    ),
+    // Noindex pages that aren't linked or in the sitemap, but still must not
+    // contain broken links (Zeffy redirects donors to the thank-you page).
+    `${BASE}/donate/thank-you`,
+  ];
 
   const statuses = new Map(); // url -> HTTP status
   const html = new Map(); // url -> body, for HTML pages

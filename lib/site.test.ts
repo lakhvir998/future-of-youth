@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getDonationUrl, getSiteUrl } from './site';
+import { getDonationUrl, getSiteUrl, isZeffyReferrer } from './site';
 
 describe('getSiteUrl', () => {
   afterEach(() => {
@@ -69,5 +69,25 @@ describe('getDonationUrl', () => {
     vi.stubEnv('NEXT_PUBLIC_DONATION_URL', 'https://www.zeffy.com/new');
     vi.stubEnv('NEXT_PUBLIC_PAYPAL_URL', 'https://www.zeffy.com/old');
     expect(getDonationUrl()).toBe('https://www.zeffy.com/new');
+  });
+});
+
+describe('isZeffyReferrer', () => {
+  it('accepts https pages on zeffy.com and its subdomains', () => {
+    expect(isZeffyReferrer('https://www.zeffy.com/')).toBe(true);
+    expect(
+      isZeffyReferrer('https://www.zeffy.com/en-US/donation-form/test')
+    ).toBe(true);
+    expect(isZeffyReferrer('https://zeffy.com/')).toBe(true);
+  });
+
+  it('rejects direct visits, other sites, and look-alike domains', () => {
+    expect(isZeffyReferrer('')).toBe(false);
+    expect(isZeffyReferrer('https://www.google.com/')).toBe(false);
+    expect(isZeffyReferrer('https://futureoftheyouth.com/donate')).toBe(false);
+    expect(isZeffyReferrer('https://notzeffy.com/')).toBe(false);
+    expect(isZeffyReferrer('https://zeffy.com.evil.example/')).toBe(false);
+    expect(isZeffyReferrer('http://www.zeffy.com/')).toBe(false);
+    expect(isZeffyReferrer('not a url')).toBe(false);
   });
 });
