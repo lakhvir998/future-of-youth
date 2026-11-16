@@ -7,6 +7,7 @@ export type AnalyticsConfig = {
   adsId?: string;
   adsContactLabel?: string;
   adsDonateLabel?: string;
+  adsDonationLabel?: string;
 };
 
 // Strict formats: these values are interpolated into an inline script, so
@@ -30,6 +31,10 @@ export function getAnalyticsConfig(): AnalyticsConfig {
     ),
     adsDonateLabel: read(
       process.env.NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL,
+      ADS_LABEL
+    ),
+    adsDonationLabel: read(
+      process.env.NEXT_PUBLIC_GOOGLE_ADS_DONATION_LABEL,
       ADS_LABEL
     ),
   };

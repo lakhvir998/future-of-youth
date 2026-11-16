@@ -72,6 +72,7 @@ app/
   robots.ts, sitemap.ts, manifest.ts, llms.txt/route.ts   SEO / AEO metadata routes
   sw.js/route.ts                  Service worker (PWA), versioned per deploy
   offline/                        Offline fallback page (noindex, not in sitemap)
+  donate/thank-you/               Zeffy post-payment redirect target; records donation_complete (noindex, not in sitemap)
   actions/
     submit-request-info.ts        'use server' → handleFormSubmission
     submit-contact.ts             'use server' → handleFormSubmission
@@ -116,23 +117,24 @@ Tests sit next to the code they cover, named `*.test.ts(x)`.
 Never commit `.env*` files except `.env.example`. Configure real values in Vercel and
 in a local `.env.local`.
 
-| Variable                               | Scope  | Purpose                                                                                                                                                                                     |
-| -------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SMTP_HOST`                            | server | SMTP server host                                                                                                                                                                            |
-| `SMTP_PORT`                            | server | SMTP port (number)                                                                                                                                                                          |
-| `SMTP_SECURE`                          | server | `"true"` for implicit TLS (usually port 465)                                                                                                                                                |
-| `SMTP_USER`                            | server | SMTP username                                                                                                                                                                               |
-| `SMTP_PASS`                            | server | SMTP password / app password                                                                                                                                                                |
-| `SMTP_FROM`                            | server | Sender address (optional, defaults to `SMTP_USER`)                                                                                                                                          |
-| `FORM_TO_EMAIL`                        | server | Inbox that receives form submissions                                                                                                                                                        |
-| `NEXT_PUBLIC_SITE_URL`                 | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost                                                                                                     |
-| `NEXT_PUBLIC_DONATION_URL`             | client | Official Zeffy donation page; must be an `https://` zeffy.com URL, or Donate Now falls back to `/donate` (the legacy `NEXT_PUBLIC_PAYPAL_URL` is still read as a fallback, Zeffy URLs only) |
-| `NEXT_PUBLIC_CONTACT_EMAIL`            | client | Public contact email (footer, Contact, Privacy, JSON-LD); hidden until set                                                                                                                  |
-| `NEXT_PUBLIC_CONTACT_PHONE`            | client | Optional public phone number                                                                                                                                                                |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID`        | client | GA4 ID (`G-…`); enables the Google tag and its CSP hosts                                                                                                                                    |
-| `NEXT_PUBLIC_GOOGLE_ADS_ID`            | client | Google Ads ID (`AW-…`)                                                                                                                                                                      |
-| `NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL` | client | Ads conversion label; fires only after a successful contact-form submission                                                                                                                 |
-| `NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL`  | client | Ads conversion label for Donate Now (Zeffy) clicks                                                                                                                                          |
+| Variable                                | Scope  | Purpose                                                                                                                                                                                     |
+| --------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SMTP_HOST`                             | server | SMTP server host                                                                                                                                                                            |
+| `SMTP_PORT`                             | server | SMTP port (number)                                                                                                                                                                          |
+| `SMTP_SECURE`                           | server | `"true"` for implicit TLS (usually port 465)                                                                                                                                                |
+| `SMTP_USER`                             | server | SMTP username                                                                                                                                                                               |
+| `SMTP_PASS`                             | server | SMTP password / app password                                                                                                                                                                |
+| `SMTP_FROM`                             | server | Sender address (optional, defaults to `SMTP_USER`)                                                                                                                                          |
+| `FORM_TO_EMAIL`                         | server | Inbox that receives form submissions                                                                                                                                                        |
+| `NEXT_PUBLIC_SITE_URL`                  | client | Canonical origin for SEO; falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then localhost                                                                                                     |
+| `NEXT_PUBLIC_DONATION_URL`              | client | Official Zeffy donation page; must be an `https://` zeffy.com URL, or Donate Now falls back to `/donate` (the legacy `NEXT_PUBLIC_PAYPAL_URL` is still read as a fallback, Zeffy URLs only) |
+| `NEXT_PUBLIC_CONTACT_EMAIL`             | client | Public contact email (footer, Contact, Privacy, JSON-LD); hidden until set                                                                                                                  |
+| `NEXT_PUBLIC_CONTACT_PHONE`             | client | Optional public phone number                                                                                                                                                                |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`         | client | GA4 ID (`G-…`); enables the Google tag and its CSP hosts                                                                                                                                    |
+| `NEXT_PUBLIC_GOOGLE_ADS_ID`             | client | Google Ads ID (`AW-…`)                                                                                                                                                                      |
+| `NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL`  | client | Ads conversion label; fires only after a successful contact-form submission                                                                                                                 |
+| `NEXT_PUBLIC_GOOGLE_ADS_DONATE_LABEL`   | client | Ads conversion label for Donate Now (Zeffy) clicks                                                                                                                                          |
+| `NEXT_PUBLIC_GOOGLE_ADS_DONATION_LABEL` | client | Ads conversion label for completed donations (Zeffy redirect to `/donate/thank-you`)                                                                                                        |
 
 Rules:
 
@@ -372,8 +374,20 @@ Screen") and works offline for pages a visitor has already opened.
   _original_ `www.google.com` URL as `blocked:csp`, which is misleading. When testing,
   don't stub Google's first response, or the redirect never happens; `curl -I` a URL
   with a dummy conversion ID (`/pagead/1p-conversion/1/`) to see the redirect.
+- **Completed donations:** Zeffy can't run our tags on its forms, so its campaign's
+  "custom thank-you redirect" (Advanced settings → More options) sends donors to
+  `/donate/thank-you` after a completed payment. `DonationCompleteTracker` records
+  `donation_complete` there, only when `document.referrer` is an https zeffy.com page
+  (direct visits and shared links don't count), once per tab (a reload keeps the
+  referrer), and waits for gtag via `trackEventWhenReady()` because the tag loads
+  `afterInteractive`. Zeffy can't pass the amount, so the conversion uses a fixed value
+  set in Google Ads. If a test donation doesn't register, check whether Zeffy's
+  redirect sends a referrer before anything else. Keep Donate Now clicks a
+  _secondary_ conversion once completed donations are primary, or one donor counts
+  twice in bidding.
 - Track only through `trackEvent()` in `lib/analytics.ts`. Its event schema is a closed
-  set (`generate_lead { form }`, `donate_click { location }`). **Never send form values
+  set (`generate_lead { form }`, `donate_click { location }`,
+  `donation_complete { source }`). **Never send form values
   or any PII**; extend the typed schema with enum-only params if you need a new event.
 - Google signals and ad personalization are disabled in the tag config (the audience
   includes families of minors). Don't enable them.
